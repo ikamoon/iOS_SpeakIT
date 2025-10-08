@@ -14,9 +14,13 @@ struct ContentView: View {
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
     @State private var isLicensePresented: Bool = false
+    @State private var navigateToDecks: Bool = false
 
     var body: some View {
         VStack(spacing: 16) {
+            // Navigation trigger for DeckListView
+            NavigationLink(destination: DeckListView(), isActive: $navigateToDecks) { EmptyView() }
+                .hidden()
             // Header with info icon
             HStack {
                 Text("SpeakPM")
@@ -152,11 +156,14 @@ struct ContentView: View {
 
     private func nextWord() {
         guard !words.isEmpty else { return }
+        let wasLast = currentIndex == words.count - 1
         currentIndex = (currentIndex + 1) % words.count
         isRevealed = false
-//        if let w = safeCurrentWord {
-//            SpeechService.shared.speakEnglish(w.english)
-//        }
+        if wasLast {
+            navigateToDecks = true
+            return
+        }
+//        if let w = safeCurrentWord { SpeechService.shared.speakEnglish(w.english) }
     }
 
     private func registerResult(_ value: Int) {
