@@ -62,7 +62,7 @@ struct ContentView: View {
                             .padding(16)
                         )
                         .frame(maxWidth: .infinity)
-                        .frame(height: 260)
+                        .frame(maxHeight: .infinity)
                         .onTapGesture { isRevealed.toggle() }
                         .padding(.horizontal)
                 }
