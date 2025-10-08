@@ -8,19 +8,25 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    var deckID: Int? = nil
+    var deckID: Int
     @Environment(\.modelContext) private var context
-    @Query(sort: \Word.createdAt) private var words: [Word]
+//    @Query(sort: \Word.createdAt)
+    private var words: [Word] = []
 
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
     @State private var isLicensePresented: Bool = false
     @State private var navigateToDecks: Bool = false
     @Environment(\.dismiss) private var dismiss
+    
+    init(deckID: Int) {
+        self.deckID = deckID
+        self.words = Word.samples.filter({ $0.deckID == deckID })
+    }
 
     var body: some View {
         VStack(spacing: 16) {
-
+            let safeCurrentWord = words.indices.contains(currentIndex) ? words[currentIndex] : nil
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
                     Text(word.english)
@@ -128,7 +134,14 @@ struct ContentView: View {
                 }
             }
         }
-        .task { seedIfNeeded() }
+        .task {
+//            async {
+//                if let dID = deckID {
+//                    words = Word.samples.filter({ $0.deckID == deckID })
+//                }
+//            }
+//            seedIfNeeded()
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: { isLicensePresented = true }) {
@@ -143,7 +156,7 @@ struct ContentView: View {
     }
 
     private var activeWords: [Word] {
-        if let deckID = deckID { return words.filter { $0.deckID == deckID } }
+//        if let deckID = deckID { return words.filter { $0.deckID == deckID } }
         return words
     }
 
@@ -181,30 +194,30 @@ struct ContentView: View {
         }
     }
 
-    private func seedIfNeeded() {
-        if let dID = deckID {
-            let forDeck = words.filter { $0.deckID == dID }
-            if !forDeck.isEmpty { return }
-            let samples = Word.samples.map { sample in
-                Word(
-                    id: sample.id,
-                    deckID: dID,
-                    japanese: sample.japanese,
-                    japaneseFurigana: sample.japaneseFurigana,
-                    english: sample.english,
-                    exampleEnglish: sample.exampleEnglish,
-                    exampleJapanese: sample.exampleJapanese,
-                    exampleJapaneseFurigana: sample.exampleJapaneseFurigana
-                )
-            }
-            for w in samples { context.insert(w) }
-            try? context.save()
-        } else {
-            if !words.isEmpty { return }
-            for w in Word.samples { context.insert(w) }
-            try? context.save()
-        }
-    }
+//    private func seedIfNeeded() {
+//        if let dID = deckID {
+//            let forDeck = words.filter { $0.deckID == dID }
+//            if !forDeck.isEmpty { return }
+//            let samples = Word.samples.map { sample in
+//                Word(
+//                    id: sample.id,
+//                    deckID: dID,
+//                    japanese: sample.japanese,
+//                    japaneseFurigana: sample.japaneseFurigana,
+//                    english: sample.english,
+//                    exampleEnglish: sample.exampleEnglish,
+//                    exampleJapanese: sample.exampleJapanese,
+//                    exampleJapaneseFurigana: sample.exampleJapaneseFurigana
+//                )
+//            }
+//            for w in samples { context.insert(w) }
+//            try? context.save()
+//        } else {
+//            if !words.isEmpty { return }
+//            for w in Word.samples { context.insert(w) }
+//            try? context.save()
+//        }
+//    }
 }
 
 //#Preview {
