@@ -15,7 +15,6 @@ struct ContentView: View {
 
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
-    @State private var isLicensePresented: Bool = false
     @State private var navigateToDecks: Bool = false
     @Environment(\.dismiss) private var dismiss
     
@@ -133,25 +132,6 @@ struct ContentView: View {
                         .foregroundColor(.secondary)
                 }
             }
-        }
-        .task {
-//            async {
-//                if let dID = deckID {
-//                    words = Word.samples.filter({ $0.deckID == deckID })
-//                }
-//            }
-//            seedIfNeeded()
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: { isLicensePresented = true }) {
-                    Image(systemName: "info.circle")
-                }
-                .accessibilityLabel("インフォメーション")
-            }
-        }
-        .sheet(isPresented: $isLicensePresented) {
-            LicenseView()
         }
     }
 

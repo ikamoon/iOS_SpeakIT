@@ -4,6 +4,8 @@ import SwiftData
 struct DeckListView: View {
     @Environment(\.modelContext) private var context
     @State private var isLicensePresented: Bool = false
+    @State private var selectedDeckID: Int? = nil
+    @State private var isDeckPresented: Bool = false
     
     
     private var decks: [Deck] = Deck.defaultDecks.map { deck in
@@ -18,7 +20,10 @@ struct DeckListView: View {
         List {
             Section(header: Text("デッキ一覧")) {
                 ForEach(decks, id: \.self) { deck in
-                    NavigationLink(destination: ContentView(deckID: deck.id)) {
+                    Button(action: {
+                        selectedDeckID = deck.id
+                        isDeckPresented = true
+                    }) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(deck.name)
                                 .font(.headline)
@@ -41,6 +46,11 @@ struct DeckListView: View {
         }
         .sheet(isPresented: $isLicensePresented) {
             LicenseView()
+        }
+        .sheet(isPresented: $isDeckPresented) {
+            if let id = selectedDeckID {
+                ContentView(deckID: id)
+            }
         }
         
     }
