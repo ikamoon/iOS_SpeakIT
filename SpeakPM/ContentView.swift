@@ -8,6 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    var deckName: String? = nil
     @Environment(\.modelContext) private var context
     @Query(sort: \Word.createdAt) private var words: [Word]
 
@@ -15,22 +16,15 @@ struct ContentView: View {
     @State private var isRevealed: Bool = false
     @State private var isLicensePresented: Bool = false
     @State private var navigateToDecks: Bool = false
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 16) {
-            // Navigation trigger for DeckListView
-            NavigationLink(destination: DeckListView(), isActive: $navigateToDecks) { EmptyView() }
-                .hidden()
-            // Header with info icon
+            // Header title inside content view
             HStack {
-                Text("SpeakPM")
+                Text(deckName ?? "SpeakPM")
                     .font(.headline)
                 Spacer()
-                Button(action: { isLicensePresented = true }) {
-                    Image(systemName: "info.circle")
-                        .imageScale(.medium)
-                }
-                .accessibilityLabel("インフォメーション")
             }
             .padding(.horizontal)
             .padding(.top, 8)
@@ -143,26 +137,36 @@ struct ContentView: View {
             }
         }
         .task { seedIfNeeded() }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: { isLicensePresented = true }) {
+                    Image(systemName: "info.circle")
+                }
+                .accessibilityLabel("インフォメーション")
+            }
+        }
         .sheet(isPresented: $isLicensePresented) {
             LicenseView()
         }
     }
 
+    private var activeWords: [Word] {
+        if let name = deckName { return words.filter { $0.deckName == name } }
+        return words
+    }
+
     private var safeCurrentWord: Word? {
-        guard !words.isEmpty else { return nil }
-        let index = min(max(0, currentIndex), words.count - 1)
-        return words[index]
+        guard !activeWords.isEmpty else { return nil }
+        let index = min(max(0, currentIndex), activeWords.count - 1)
+        return activeWords[index]
     }
 
     private func nextWord() {
-        guard !words.isEmpty else { return }
-        let wasLast = currentIndex == words.count - 1
-        currentIndex = (currentIndex + 1) % words.count
+        guard !activeWords.isEmpty else { return }
+        let wasLast = currentIndex == activeWords.count - 1
+        currentIndex = (currentIndex + 1) % activeWords.count
         isRevealed = false
-        if wasLast {
-            navigateToDecks = true
-            return
-        }
+        if wasLast { dismiss(); return }
 //        if let w = safeCurrentWord { SpeechService.shared.speakEnglish(w.english) }
     }
 
@@ -175,9 +179,27 @@ struct ContentView: View {
     }
 
     private func seedIfNeeded() {
-        if !words.isEmpty { return }
-        for w in Word.samples { context.insert(w) }
-        try? context.save()
+        if let name = deckName {
+            let forDeck = words.filter { $0.deckName == name }
+            if !forDeck.isEmpty { return }
+            let samples = Word.samples.map { sample in
+                Word(
+                    deckName: name,
+                    japanese: sample.japanese,
+                    japaneseFurigana: sample.japaneseFurigana,
+                    english: sample.english,
+                    exampleEnglish: sample.exampleEnglish,
+                    exampleJapanese: sample.exampleJapanese,
+                    exampleJapaneseFurigana: sample.exampleJapaneseFurigana
+                )
+            }
+            for w in samples { context.insert(w) }
+            try? context.save()
+        } else {
+            if !words.isEmpty { return }
+            for w in Word.samples { context.insert(w) }
+            try? context.save()
+        }
     }
 }
 
