@@ -22,10 +22,10 @@ struct ContentView: View {
                         .font(.system(size: 36, weight: .bold))
                         .multilineTextAlignment(.center)
 
-                    Text("受動語彙：単語を発音してみる。\n能動語彙：瞬間英作文　単語を使って例文を作って、喋ってみる")
+                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
                         .font(.footnote)
                         .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .padding(.horizontal)
 
                     RoundedRectangle(cornerRadius: 16)
