@@ -136,9 +136,9 @@ struct ContentView: View {
         guard !words.isEmpty else { return }
         currentIndex = (currentIndex + 1) % words.count
         isRevealed = false
-        if let w = safeCurrentWord {
-            SpeechService.shared.speakEnglish(w.english)
-        }
+//        if let w = safeCurrentWord {
+//            SpeechService.shared.speakEnglish(w.english)
+//        }
     }
 
     private func registerResult(_ value: Int) {
