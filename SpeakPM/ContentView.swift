@@ -13,9 +13,24 @@ struct ContentView: View {
 
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
+    @State private var isLicensePresented: Bool = false
 
     var body: some View {
         VStack(spacing: 16) {
+            // Header with info icon
+            HStack {
+                Text("SpeakPM")
+                    .font(.headline)
+                Spacer()
+                Button(action: { isLicensePresented = true }) {
+                    Image(systemName: "info.circle")
+                        .imageScale(.medium)
+                }
+                .accessibilityLabel("インフォメーション")
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
                     Text(word.english)
@@ -124,6 +139,9 @@ struct ContentView: View {
             }
         }
         .task { seedIfNeeded() }
+        .sheet(isPresented: $isLicensePresented) {
+            LicenseView()
+        }
     }
 
     private var safeCurrentWord: Word? {
