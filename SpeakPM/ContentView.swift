@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    var deckName: String? = nil
+    var deckID: Int? = nil
     @Environment(\.modelContext) private var context
     @Query(sort: \Word.createdAt) private var words: [Word]
 
@@ -143,7 +143,7 @@ struct ContentView: View {
     }
 
     private var activeWords: [Word] {
-        if let name = deckName { return words.filter { $0.deckName == name } }
+        if let deckID = deckID { return words.filter { $0.deckID == deckID } }
         return words
     }
 
@@ -171,12 +171,12 @@ struct ContentView: View {
     }
 
     private func seedIfNeeded() {
-        if let name = deckName {
-            let forDeck = words.filter { $0.deckName == name }
+        if let dID = deckID {
+            let forDeck = words.filter { $0.deckID == dID }
             if !forDeck.isEmpty { return }
             let samples = Word.samples.map { sample in
                 Word(
-                    deckName: name,
+                    deckID: dID,
                     japanese: sample.japanese,
                     japaneseFurigana: sample.japaneseFurigana,
                     english: sample.english,

@@ -3,7 +3,7 @@ import SwiftData
 
 @Model
 final class Word {
-    var deckName: String
+    var deckID: Int
     var japanese: String
     var japaneseFurigana: String
     var english: String
@@ -17,7 +17,7 @@ final class Word {
     var updatedAt: Date
 
     init(
-        deckName: String,
+        deckID: Int,
         japanese: String,
         japaneseFurigana: String,
         english: String,
@@ -25,7 +25,7 @@ final class Word {
         exampleJapanese: String,
         exampleJapaneseFurigana: String
     ) {
-        self.deckName = deckName
+        self.deckID = deckID
         self.japanese = japanese
         self.japaneseFurigana = japaneseFurigana
         self.english = english
@@ -43,7 +43,7 @@ extension Word {
     static var samples: [Word] {
         [
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "チケットを取る",
                 japaneseFurigana: "チケットを取(と)る",
                 english: "take a ticket",
@@ -52,7 +52,7 @@ extension Word {
                 exampleJapaneseFurigana: "すでに3(みっ)つチケットを取(と)っているので、今週(こんしゅう)は取(と)れません。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "すでに",
                 japaneseFurigana: "すでに",
                 english: "adv. already",
@@ -61,7 +61,7 @@ extension Word {
                 exampleJapaneseFurigana: "ー"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "プルリクを出す",
                 japaneseFurigana: "プルリクを出(だ)す",
                 english: "make/create a pull request",
@@ -70,7 +70,7 @@ extension Word {
                 exampleJapaneseFurigana: "昨日(きのう)、プルリクを出(だ)しました。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "開発する",
                 japaneseFurigana: "開発(かいはつ)する",
                 english: "v. develop",
@@ -79,7 +79,7 @@ extension Word {
                 exampleJapaneseFurigana: "今(いま)、Xを開発(かいはつ)しています。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "修正する",
                 japaneseFurigana: "修正(しゅうせい)する",
                 english: "v. correct, revise",
@@ -88,7 +88,7 @@ extension Word {
                 exampleJapaneseFurigana: "修正(しゅうせい)は今日中(きょうじゅう)に終(お)わると思(おも)います。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "マージする",
                 japaneseFurigana: "マージする",
                 english: "v. merge",
@@ -97,7 +97,7 @@ extension Word {
                 exampleJapaneseFurigana: "XをYにマージしました。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "進める",
                 japaneseFurigana: "進(すす)める",
                 english: "v. [*transitive verb 他動詞]\n1. move forward, proceed with (something)\n2. work on",
@@ -106,7 +106,7 @@ extension Word {
                 exampleJapaneseFurigana: "このチケットは、Kenさんと一緒(いっしょ)に進(すす)めています。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "[システムが]動く",
                 japaneseFurigana: "[システムが]動(うご)く",
                 english: "v. work, operate",
@@ -115,7 +115,7 @@ extension Word {
                 exampleJapaneseFurigana: "システムがちゃんと動(うご)いてないことがわかった。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "ちゃんと",
                 japaneseFurigana: "ちゃんと ※casual",
                 english: "adv. properly",
@@ -124,7 +124,7 @@ extension Word {
                 exampleJapaneseFurigana: "ー"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "間に合う",
                 japaneseFurigana: "間(ま)に合(あ)う",
                 english: "be in time, make a deadline",
@@ -133,7 +133,7 @@ extension Word {
                 exampleJapaneseFurigana: "来週(らいしゅう)のリリースには間(ま)に合(あ)いそうです。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "状態",
                 japaneseFurigana: "状態(じょうたい)",
                 english: "n. status",
@@ -142,7 +142,7 @@ extension Word {
                 exampleJapaneseFurigana: "QAしてもらえる状態(じょうたい)のものがありますか。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "課題",
                 japaneseFurigana: "課題(かだい)",
                 english: "n. issue",
@@ -151,7 +151,7 @@ extension Word {
                 exampleJapaneseFurigana: "課題(かだい)が見(み)つかった。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "要件",
                 japaneseFurigana: "要件(ようけん)",
                 english: "n. requirements",
@@ -160,7 +160,7 @@ extension Word {
                 exampleJapaneseFurigana: "要件(ようけん)は明日(あした)、TLに共有(きょうゆう)します。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "仕様",
                 japaneseFurigana: "仕様(しよう)",
                 english: "n. specification document",
@@ -169,7 +169,7 @@ extension Word {
                 exampleJapaneseFurigana: "まだ仕様(しよう)が決(き)まってない。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "固まる (*自動詞)",
                 japaneseFurigana: "固(かた)まる (*intransitive verb)",
                 english: "v. take shape (*intransitive verb)",
@@ -178,7 +178,7 @@ extension Word {
                 exampleJapaneseFurigana: "まだ仕様(しよう)が固(かた)まっていません。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "支障",
                 japaneseFurigana: "支障(ししょう)",
                 english: "n. obstacle, hitch",
@@ -187,7 +187,7 @@ extension Word {
                 exampleJapaneseFurigana: "それによって(プロジェクトに)支障(ししょう)が出(で)ています。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "影響",
                 japaneseFurigana: "影響(えいきょう)",
                 english: "n. effect",
@@ -196,7 +196,7 @@ extension Word {
                 exampleJapaneseFurigana: "これは、お客様(きゃくさま)に影響(えいきょう)があるインシデントじゃないです。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "原因",
                 japaneseFurigana: "原因(げんいん)",
                 english: "n. cause",
@@ -205,7 +205,7 @@ extension Word {
                 exampleJapaneseFurigana: "これから原因(げんいん)を調(しら)べます。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "相談する",
                 japaneseFurigana: "相談(そうだん)する",
                 english: "v. consult",
@@ -214,7 +214,7 @@ extension Word {
                 exampleJapaneseFurigana: "マネージャーに相談(そうだん)する。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "困る",
                 japaneseFurigana: "困(こま)る",
                 english: "v. be in trouble",
@@ -223,7 +223,7 @@ extension Word {
                 exampleJapaneseFurigana: "何(なに)か困(こま)ってることがありますか。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "[人/チームと]連携する",
                 japaneseFurigana: "[人(ひと)/チームと]連携(れんけい)する",
                 english: "v. work together, align with",
@@ -232,7 +232,7 @@ extension Word {
                 exampleJapaneseFurigana: "これはteam Bと連携(れんけい)してやっていきます。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "sync(シンク)する",
                 japaneseFurigana: "sync(シンク)する",
                 english: "v. sync",
@@ -241,7 +241,7 @@ extension Word {
                 exampleJapaneseFurigana: "あとでTLとsyncしておきます。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "設定する",
                 japaneseFurigana: "設定(せってい)する",
                 english: "v. set",
@@ -250,7 +250,7 @@ extension Word {
                 exampleJapaneseFurigana: "目標(もくひょう)を設定(せってい)する。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
                 japanese: "反映する",
                 japaneseFurigana: "反映(はんえい)する",
                 english: "v. reflect",
@@ -259,7 +259,18 @@ extension Word {
                 exampleJapaneseFurigana: "先週(せんしゅう)修正(しゅうせい)したけど、Jiraに反映(はんえい)されてません。"
             ),
             Word(
-                deckName: "Mercari Engineer Vocabulary List - list_1",
+                deckID: 1,
+                japanese: "効率",
+                japaneseFurigana: "効率(こうりつ)",
+                english: "n. efficiency",
+                exampleEnglish: "That method seems efficient.",
+                exampleJapanese: "そのやり方は、効率がよさそう。",
+                exampleJapaneseFurigana: "そのやり方(かた)は、効率(こうりつ)がよさそう。"
+            ),
+            
+            /* list_2 */
+            Word(
+                deckID: 2,
                 japanese: "効率",
                 japaneseFurigana: "効率(こうりつ)",
                 english: "n. efficiency",
