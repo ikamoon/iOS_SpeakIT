@@ -2,7 +2,8 @@ import Foundation
 import SwiftData
 
 @Model
-final class Word {
+ final class Word {
+    var id: Int
     var deckID: Int
     var japanese: String
     var japaneseFurigana: String
@@ -10,12 +11,12 @@ final class Word {
     var exampleEnglish: String
     var exampleJapanese: String
     var exampleJapaneseFurigana: String
-    // Review information moved to WordReview model
-    var review: WordReview?
+     
     var createdAt: Date
     var updatedAt: Date
 
     init(
+        id: Int,
         deckID: Int,
         japanese: String,
         japaneseFurigana: String,
@@ -24,6 +25,7 @@ final class Word {
         exampleJapanese: String,
         exampleJapaneseFurigana: String
     ) {
+        self.id = id
         self.deckID = deckID
         self.japanese = japanese
         self.japaneseFurigana = japaneseFurigana
@@ -40,6 +42,7 @@ extension Word {
     static var samples: [Word] {
         [
             Word(
+                id: 0,
                 deckID: 1,
                 japanese: "チケットを取る",
                 japaneseFurigana: "チケットを取(と)る",
@@ -49,6 +52,7 @@ extension Word {
                 exampleJapaneseFurigana: "すでに3(みっ)つチケットを取(と)っているので、今週(こんしゅう)は取(と)れません。"
             ),
             Word(
+                id: 2,
                 deckID: 1,
                 japanese: "すでに",
                 japaneseFurigana: "すでに",
@@ -58,6 +62,7 @@ extension Word {
                 exampleJapaneseFurigana: "ー"
             ),
             Word(
+                id: 3,
                 deckID: 1,
                 japanese: "プルリクを出す",
                 japaneseFurigana: "プルリクを出(だ)す",
@@ -67,6 +72,7 @@ extension Word {
                 exampleJapaneseFurigana: "昨日(きのう)、プルリクを出(だ)しました。"
             ),
             Word(
+                id: 4,
                 deckID: 1,
                 japanese: "開発する",
                 japaneseFurigana: "開発(かいはつ)する",
@@ -76,6 +82,7 @@ extension Word {
                 exampleJapaneseFurigana: "今(いま)、Xを開発(かいはつ)しています。"
             ),
             Word(
+                id: 5,
                 deckID: 1,
                 japanese: "修正する",
                 japaneseFurigana: "修正(しゅうせい)する",
@@ -85,6 +92,7 @@ extension Word {
                 exampleJapaneseFurigana: "修正(しゅうせい)は今日中(きょうじゅう)に終(お)わると思(おも)います。"
             ),
             Word(
+                id: 6,
                 deckID: 1,
                 japanese: "マージする",
                 japaneseFurigana: "マージする",
@@ -94,6 +102,7 @@ extension Word {
                 exampleJapaneseFurigana: "XをYにマージしました。"
             ),
             Word(
+                id: 7,
                 deckID: 1,
                 japanese: "進める",
                 japaneseFurigana: "進(すす)める",
@@ -103,6 +112,7 @@ extension Word {
                 exampleJapaneseFurigana: "このチケットは、Kenさんと一緒(いっしょ)に進(すす)めています。"
             ),
             Word(
+                id: 8,
                 deckID: 1,
                 japanese: "[システムが]動く",
                 japaneseFurigana: "[システムが]動(うご)く",
@@ -112,6 +122,7 @@ extension Word {
                 exampleJapaneseFurigana: "システムがちゃんと動(うご)いてないことがわかった。"
             ),
             Word(
+                id: 9,
                 deckID: 1,
                 japanese: "ちゃんと",
                 japaneseFurigana: "ちゃんと ※casual",
@@ -121,6 +132,7 @@ extension Word {
                 exampleJapaneseFurigana: "ー"
             ),
             Word(
+                id: 10,
                 deckID: 1,
                 japanese: "間に合う",
                 japaneseFurigana: "間(ま)に合(あ)う",
@@ -130,6 +142,7 @@ extension Word {
                 exampleJapaneseFurigana: "来週(らいしゅう)のリリースには間(ま)に合(あ)いそうです。"
             ),
             Word(
+                id: 11,
                 deckID: 1,
                 japanese: "状態",
                 japaneseFurigana: "状態(じょうたい)",
@@ -139,6 +152,7 @@ extension Word {
                 exampleJapaneseFurigana: "QAしてもらえる状態(じょうたい)のものがありますか。"
             ),
             Word(
+                id: 12,
                 deckID: 1,
                 japanese: "課題",
                 japaneseFurigana: "課題(かだい)",
@@ -148,6 +162,7 @@ extension Word {
                 exampleJapaneseFurigana: "課題(かだい)が見(み)つかった。"
             ),
             Word(
+                id: 13,
                 deckID: 1,
                 japanese: "要件",
                 japaneseFurigana: "要件(ようけん)",
@@ -157,6 +172,7 @@ extension Word {
                 exampleJapaneseFurigana: "要件(ようけん)は明日(あした)、TLに共有(きょうゆう)します。"
             ),
             Word(
+                id: 14,
                 deckID: 1,
                 japanese: "仕様",
                 japaneseFurigana: "仕様(しよう)",
@@ -166,6 +182,7 @@ extension Word {
                 exampleJapaneseFurigana: "まだ仕様(しよう)が決(き)まってない。"
             ),
             Word(
+                id: 15,
                 deckID: 1,
                 japanese: "固まる (*自動詞)",
                 japaneseFurigana: "固(かた)まる (*intransitive verb)",
@@ -175,6 +192,7 @@ extension Word {
                 exampleJapaneseFurigana: "まだ仕様(しよう)が固(かた)まっていません。"
             ),
             Word(
+                id: 16,
                 deckID: 1,
                 japanese: "支障",
                 japaneseFurigana: "支障(ししょう)",
@@ -184,6 +202,7 @@ extension Word {
                 exampleJapaneseFurigana: "それによって(プロジェクトに)支障(ししょう)が出(で)ています。"
             ),
             Word(
+                id: 17,
                 deckID: 1,
                 japanese: "影響",
                 japaneseFurigana: "影響(えいきょう)",
@@ -193,6 +212,7 @@ extension Word {
                 exampleJapaneseFurigana: "これは、お客様(きゃくさま)に影響(えいきょう)があるインシデントじゃないです。"
             ),
             Word(
+                id: 18,
                 deckID: 1,
                 japanese: "原因",
                 japaneseFurigana: "原因(げんいん)",
@@ -202,6 +222,7 @@ extension Word {
                 exampleJapaneseFurigana: "これから原因(げんいん)を調(しら)べます。"
             ),
             Word(
+                id: 19,
                 deckID: 1,
                 japanese: "相談する",
                 japaneseFurigana: "相談(そうだん)する",
@@ -211,6 +232,7 @@ extension Word {
                 exampleJapaneseFurigana: "マネージャーに相談(そうだん)する。"
             ),
             Word(
+                id: 20,
                 deckID: 1,
                 japanese: "困る",
                 japaneseFurigana: "困(こま)る",
@@ -220,6 +242,7 @@ extension Word {
                 exampleJapaneseFurigana: "何(なに)か困(こま)ってることがありますか。"
             ),
             Word(
+                id: 21,
                 deckID: 1,
                 japanese: "[人/チームと]連携する",
                 japaneseFurigana: "[人(ひと)/チームと]連携(れんけい)する",
@@ -229,6 +252,7 @@ extension Word {
                 exampleJapaneseFurigana: "これはteam Bと連携(れんけい)してやっていきます。"
             ),
             Word(
+                id: 22,
                 deckID: 1,
                 japanese: "sync(シンク)する",
                 japaneseFurigana: "sync(シンク)する",
@@ -238,6 +262,7 @@ extension Word {
                 exampleJapaneseFurigana: "あとでTLとsyncしておきます。"
             ),
             Word(
+                id: 23,
                 deckID: 1,
                 japanese: "設定する",
                 japaneseFurigana: "設定(せってい)する",
@@ -247,6 +272,7 @@ extension Word {
                 exampleJapaneseFurigana: "目標(もくひょう)を設定(せってい)する。"
             ),
             Word(
+                id: 24,
                 deckID: 1,
                 japanese: "反映する",
                 japaneseFurigana: "反映(はんえい)する",
@@ -256,6 +282,7 @@ extension Word {
                 exampleJapaneseFurigana: "先週(せんしゅう)修正(しゅうせい)したけど、Jiraに反映(はんえい)されてません。"
             ),
             Word(
+                id: 25,
                 deckID: 1,
                 japanese: "効率",
                 japaneseFurigana: "効率(こうりつ)",
@@ -267,6 +294,7 @@ extension Word {
             
             /* list_2 */
             Word(
+                id: 26,
                 deckID: 2,
                 japanese: "効率",
                 japaneseFurigana: "効率(こうりつ)",

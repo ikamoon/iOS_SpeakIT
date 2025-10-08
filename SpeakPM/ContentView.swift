@@ -165,18 +165,20 @@ struct ContentView: View {
     private func registerResult(_ value: Int) {
         guard let word = safeCurrentWord else { return }
         let review: WordReview
-        if let existing = word.review {
-            review = existing
-        } else {
-            let newReview = WordReview(word: word)
-            word.review = newReview
-            review = newReview
+        let fetchDescriptor = FetchDescriptor<WordReview>()
+        if let reviews: [WordReview] = try? context.fetch(fetchDescriptor).filter({ $0.wordID == word.id }) {
+            if reviews.isEmpty {
+                let newReview = WordReview(wordID: word.id)
+                review = newReview
+            } else {
+                review = reviews[0]
+            }
+            review.lastResult = value
+            review.reviewCount += 1
+            review.updatedAt = .init()
+            word.updatedAt = .init()
+            try? context.save()
         }
-        review.lastResult = value
-        review.reviewCount += 1
-        review.updatedAt = .init()
-        word.updatedAt = .init()
-        try? context.save()
     }
 
     private func seedIfNeeded() {
@@ -185,6 +187,7 @@ struct ContentView: View {
             if !forDeck.isEmpty { return }
             let samples = Word.samples.map { sample in
                 Word(
+                    id: sample.id,
                     deckID: dID,
                     japanese: sample.japanese,
                     japaneseFurigana: sample.japaneseFurigana,
