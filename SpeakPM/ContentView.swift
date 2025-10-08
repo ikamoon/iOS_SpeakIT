@@ -18,10 +18,10 @@ struct ContentView: View {
         VStack(spacing: 16) {
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
-                        Text(word.english)
-                            .font(.system(size: 36, weight: .bold))
-                            .multilineTextAlignment(.center)
-                            .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
+                    Text(word.english)
+                        .font(.system(size: 36, weight: .bold))
+                        .multilineTextAlignment(.center)
+                        .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
 
                     Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
                         .font(.footnote)
@@ -136,6 +136,9 @@ struct ContentView: View {
         guard !words.isEmpty else { return }
         currentIndex = (currentIndex + 1) % words.count
         isRevealed = false
+        if let w = safeCurrentWord {
+            SpeechService.shared.speakEnglish(w.english)
+        }
     }
 
     private func registerResult(_ value: Int) {
