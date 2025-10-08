@@ -26,12 +26,12 @@ extension Deck {
         [
             Deck(
                 id: 1,
-                name: "Mercari Engineer Vocabulary List - list_1",
+                name: "Engineer Vocabulary List - list_1",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
             Deck(
                 id: 2,
-                name: "Mercari Engineer Vocabulary List - list_2",
+                name: "Engineer Vocabulary List - list_2",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
         ]

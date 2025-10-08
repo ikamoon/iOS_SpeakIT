@@ -28,6 +28,7 @@ struct ContentView: View {
             let safeCurrentWord = words.indices.contains(currentIndex) ? words[currentIndex] : nil
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
+                    Spacer()
                     Text(word.english)
                         .font(.system(size: 36, weight: .bold))
                         .multilineTextAlignment(.center)
