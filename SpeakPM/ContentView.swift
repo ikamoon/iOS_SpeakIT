@@ -20,14 +20,6 @@ struct ContentView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // Header title inside content view
-            HStack {
-                Text(deckName ?? "SpeakPM")
-                    .font(.headline)
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.top, 8)
 
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
