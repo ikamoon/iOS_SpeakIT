@@ -18,9 +18,10 @@ struct ContentView: View {
         VStack(spacing: 16) {
             if let word = safeCurrentWord {
                 VStack(spacing: 8) {
-                    Text(word.english)
-                        .font(.system(size: 36, weight: .bold))
-                        .multilineTextAlignment(.center)
+                        Text(word.english)
+                            .font(.system(size: 36, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
 
                     Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
                         .font(.footnote)
@@ -45,10 +46,19 @@ struct ContentView: View {
                                         Text("例文")
                                             .font(.headline)
                                         Text(word.exampleEnglish)
+                                            .onTapGesture { SpeechService.shared.speakEnglish(word.exampleEnglish) }
                                         Text(word.exampleJapanese)
                                         Text(word.exampleJapaneseFurigana)
                                             .foregroundColor(.secondary)
                                     }
+                                    Spacer()
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "hand.tap")
+                                            .foregroundColor(.secondary)
+                                        Text("英文をタップすると、音声が流れます")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                 } else {
                                     VStack(spacing: 8) {
                                         Text("タップすると、意味や例文が出ます")
