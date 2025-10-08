@@ -10,9 +10,8 @@ final class Word {
     var exampleEnglish: String
     var exampleJapanese: String
     var exampleJapaneseFurigana: String
-
-    var reviewCount: Int
-    var lastResult: Int // 2: 瞬間英作文できた, 1: すぐ分かった, 0: 分からなかった
+    // Review information moved to WordReview model
+    var review: WordReview?
     var createdAt: Date
     var updatedAt: Date
 
@@ -32,8 +31,6 @@ final class Word {
         self.exampleEnglish = exampleEnglish
         self.exampleJapanese = exampleJapanese
         self.exampleJapaneseFurigana = exampleJapaneseFurigana
-        self.reviewCount = 0
-        self.lastResult = -1
         self.createdAt = .init()
         self.updatedAt = .init()
     }

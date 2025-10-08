@@ -164,8 +164,17 @@ struct ContentView: View {
 
     private func registerResult(_ value: Int) {
         guard let word = safeCurrentWord else { return }
-        word.lastResult = value
-        word.reviewCount += 1
+        let review: WordReview
+        if let existing = word.review {
+            review = existing
+        } else {
+            let newReview = WordReview(word: word)
+            word.review = newReview
+            review = newReview
+        }
+        review.lastResult = value
+        review.reviewCount += 1
+        review.updatedAt = .init()
         word.updatedAt = .init()
         try? context.save()
     }
