@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
- final class Word {
+final class Word {
     var id: Int
     var deckID: Int
     var japanese: String
@@ -11,10 +11,10 @@ import SwiftData
     var exampleEnglish: String
     var exampleJapanese: String
     var exampleJapaneseFurigana: String
-     
+    
     var createdAt: Date
     var updatedAt: Date
-
+    
     init(
         id: Int,
         deckID: Int,
@@ -39,7 +39,16 @@ import SwiftData
 }
 
 extension Word {
-    static var samples: [Word] {
+    static func getWordsByID(deckID: Int) -> [Word]  {
+        switch deckID {
+        case 1:
+            return list1Decks
+        default :
+            return []
+        }
+    }
+    
+    static var list1Decks: [Word] {
         [
             Word(
                 id: 0,

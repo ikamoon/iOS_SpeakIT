@@ -8,25 +8,32 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    var deckID: Int
+    var deckID: Int = 1
     @Environment(\.modelContext) private var context
 //    @Query(sort: \Word.createdAt)
-    private var words: [Word] = []
+    @State private var words: [Word] = []
 
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
     @State private var navigateToDecks: Bool = false
     @Environment(\.dismiss) private var dismiss
+    @State private var isLoading: Bool = true
     
     init(deckID: Int) {
         self.deckID = deckID
-        self.words = Word.samples.filter({ $0.deckID == deckID })
     }
 
     var body: some View {
         VStack(spacing: 16) {
             let safeCurrentWord = words.indices.contains(currentIndex) ? words[currentIndex] : nil
-            if let word = safeCurrentWord {
+            if isLoading {
+                VStack(spacing: 12) {
+                    ProgressView()
+                    Text("英単語をロードしています…")
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            } else if let word = safeCurrentWord {
                 VStack(spacing: 8) {
                     Spacer()
                     Text(word.english)
@@ -128,11 +135,16 @@ struct ContentView: View {
                 .padding(.horizontal)
             } else {
                 VStack(spacing: 12) {
-                    ProgressView()
-                    Text("データを作成しています…")
+                    Text("単語がありません")
                         .foregroundColor(.secondary)
                 }
             }
+        }
+        .onAppear {
+            loadWords()
+        }
+        .task(id: deckID) {
+            loadWords()
         }
     }
 
@@ -145,6 +157,14 @@ struct ContentView: View {
         guard !activeWords.isEmpty else { return nil }
         let index = min(max(0, currentIndex), activeWords.count - 1)
         return activeWords[index]
+    }
+
+    private func loadWords() {
+        print("loadWords called for deckID: \(deckID)")
+        isLoading = true
+        words = Word.getWordsByID(deckID: deckID)
+        isLoading = false
+        print("Loaded \(words.count) words for deckID: \(deckID)")
     }
 
     private func nextWord() {
