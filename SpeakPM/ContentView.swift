@@ -18,6 +18,10 @@ struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isLoading: Bool = true
     @State private var didSpeakFirstOnAppear: Bool = false
+    private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
+    private let pastelGreen = Color(red: 128/255.0, green: 255/255.0, blue: 128/255.0)
+    private let pastelBlue = Color(red: 148/255.0, green: 219/255.0, blue: 255/255.0)
+    private let pastelPink = Color(red: 255/255.0, green: 148/255.0, blue: 191/255.0)
     
     init(deckID: Int) {
         self.deckID = deckID
@@ -34,13 +38,14 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             } else if let word = safeCurrentWord {
-                VStack(spacing: 8) {
+                VStack(spacing: 18) {
                     Spacer()
                     HStack(spacing: 8) {
                         Text(word.english)
                             .font(.system(size: 36, weight: .bold))
                             .multilineTextAlignment(.center)
                             .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
+                            .foregroundColor(Color(red: 93/255.0, green: 93/255.0, blue: 93/255.0))
                         Button(action: { SpeechService.shared.speakEnglish(word.english) }) {
                             Image(systemName: "speaker.wave.2.fill")
                                 .font(.system(size: 24))
@@ -50,11 +55,11 @@ struct ContentView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
 
-                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
-                        .padding(.horizontal)
+//                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
+//                        .font(.footnote)
+//                        .foregroundColor(.secondary)
+//                        .multilineTextAlignment(.leading)
+//                        .padding(.horizontal)
 
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color(.systemGray6))
@@ -91,12 +96,19 @@ struct ContentView: View {
                                     }
                                     .frame(maxWidth: .infinity, alignment: .center)
                                 } else {
-                                    VStack(spacing: 8) {
+                                    VStack(spacing: 28) {
+                                        Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
+                                            .font(.footnote)
+                                            .foregroundColor(.secondary)
+                                            .frame(maxWidth: .infinity)
+//                                            .frame(maxWidth: 200, alignment: .init(horizontal: .center, vertical: .top))
+//                                            .multilineTextAlignment(.leading)
+                                            .padding(.horizontal)
                                         Image(systemName: "hand.tap")
                                             .font(.system(size: 36))
                                             .foregroundColor(.secondary)
                                     }
-                                    .frame(maxWidth: 50, alignment: .center)
+                                    .frame(maxWidth: 300, alignment: .center)
                                 }
                             }
                             .padding(16)
@@ -107,8 +119,6 @@ struct ContentView: View {
                         .padding(.horizontal)
                 }
 
-                Spacer()
-
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
                         Button(action: { registerResult(0); nextWord() }) {
@@ -117,9 +127,9 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 12)
-                                .background(Color.red)
+                                .background(pastelGreen)
                                 .clipShape(Capsule())
-                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
+                                .shadow(color: pastelGreen.opacity(0.6), radius: 6, x: 0, y: 3)
                         }
                         .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
 
@@ -129,9 +139,9 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 12)
-                                .background(Color.green)
+                                .background(pastelBlue)
                                 .clipShape(Capsule())
-                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
+                                .shadow(color: pastelBlue.opacity(0.6), radius: 6, x: 0, y: 3)
                         }
                         .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                         
@@ -141,9 +151,9 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 12)
-                                .background(Color.blue)
+                                .background(pastelPink)
                                 .clipShape(Capsule())
-                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
+                                .shadow(color: pastelPink.opacity(0.6), radius: 6, x: 0, y: 3)
                         }
                         .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                     }
@@ -156,6 +166,14 @@ struct ContentView: View {
                     Text("単語がありません")
                         .foregroundColor(.secondary)
                 }
+            }
+        }
+        .tint(Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0))
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Text("デッキ")
+                    .font(.headline) // フォントを設定
+                    .foregroundColor(themeColor) // 文字色を赤色に設定
             }
         }
         .onAppear {

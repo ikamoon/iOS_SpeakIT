@@ -5,6 +5,7 @@ struct DeckListView: View {
     @Environment(\.modelContext) private var context
     @State private var isLicensePresented: Bool = false
     @State private var pressedDeckID: Int? = nil
+    private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     
     private var decks: [Deck] = Deck.defaultDecks.map { deck in
         Deck(
@@ -20,9 +21,10 @@ struct DeckListView: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
                     Image(systemName: "sparkles")
-                        .foregroundColor(.orange)
+                        .foregroundColor(themeColor)
                     Text("簡単な単語で、開発現場の英語を使うデッキ")
                         .font(.headline)
+                        .foregroundColor(Color(red: 93/255.0, green: 93/255.0, blue: 93/255.0))
                 }
                 .padding(.horizontal)
                 LazyVGrid(columns: columns, spacing: 16) {
@@ -31,7 +33,8 @@ struct DeckListView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(deck.name)
                                     .font(.headline)
-                                    .foregroundColor(.primary)
+//                                    .foregroundColor(.primary)
+                                    .foregroundColor(Color(red: 93/255.0, green: 93/255.0, blue: 93/255.0))
                                 Text(deck.licenceText)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
@@ -41,8 +44,8 @@ struct DeckListView: View {
                             .padding(12)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.orange.opacity(0.1))
-                                    .shadow(color: Color.orange.opacity(0.7), radius: 6, x: 0, y: 3)
+                                    .fill(themeColor.opacity(0.1))
+                                    .shadow(color: themeColor.opacity(0.7), radius: 6, x: 0, y: 3)
                             )
                             .scaleEffect(pressedDeckID == deck.id ? 0.98 : 1.0)
                             .animation(.easeOut(duration: 0.08), value: pressedDeckID == deck.id)
@@ -58,11 +61,19 @@ struct DeckListView: View {
                 .padding(.bottom)
             }
         }
-        .navigationTitle("デッキ")
+//        .navigationTitle("デッキ")
         .toolbar {
+            ToolbarItem(placement: .principal) { // タイトル部分をカスタムする
+                Text("デッキ")
+                    .font(.headline) // フォントを設定
+                    .foregroundColor(themeColor) // 文字色を赤色に設定
+                    
+            }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: { isLicensePresented = true }) {
                     Image(systemName: "info.circle")
+                        .foregroundColor(themeColor)
                 }
                 .accessibilityLabel("インフォメーション")
             }

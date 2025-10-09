@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct SpeakPMApp: App {
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             WordReview.self,
