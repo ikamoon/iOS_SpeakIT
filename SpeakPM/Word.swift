@@ -48,6 +48,12 @@ extension Word {
             return list1Decks
         case 2:
             return list2Decks
+        case 3:
+            return list3Decks
+        case 4:
+            return list4Decks
+        case 5:
+            return list5Decks
         default :
             return []
         }
