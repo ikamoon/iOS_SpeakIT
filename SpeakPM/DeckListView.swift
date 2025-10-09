@@ -5,6 +5,8 @@ struct DeckListView: View {
     @Environment(\.modelContext) private var context
     @State private var isLicensePresented: Bool = false
     @State private var pressedDeckID: Int? = nil
+    @State private var selectedDeckID: Int? = nil
+    @State private var isDeckSheetPresented: Bool = false
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     
     private var decks: [Deck] = Deck.defaultDecks.map { deck in
@@ -29,11 +31,13 @@ struct DeckListView: View {
                 .padding(.horizontal)
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(decks, id: \.self) { deck in
-                        NavigationLink(destination: ContentView(deckID: deck.id)) {
+                        Button {
+                            selectedDeckID = deck.id
+                            isDeckSheetPresented = true
+                        } label: {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(deck.name)
                                     .font(.headline)
-//                                    .foregroundColor(.primary)
                                     .foregroundColor(Color(red: 93/255.0, green: 93/255.0, blue: 93/255.0))
                                 Text(deck.licenceText)
                                     .font(.caption)
@@ -80,6 +84,11 @@ struct DeckListView: View {
         }
         .sheet(isPresented: $isLicensePresented) {
             LicenseView()
+        }
+        .sheet(isPresented: $isDeckSheetPresented) {
+            if let id = selectedDeckID {
+                ContentView(deckID: id)
+            }
         }
     }
 }

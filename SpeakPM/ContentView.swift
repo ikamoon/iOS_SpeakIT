@@ -168,14 +168,6 @@ struct ContentView: View {
                 }
             }
         }
-        .tint(Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0))
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                Text("デッキ")
-                    .font(.headline) // フォントを設定
-                    .foregroundColor(themeColor) // 文字色を赤色に設定
-            }
-        }
         .onAppear {
             loadWords()
         }
