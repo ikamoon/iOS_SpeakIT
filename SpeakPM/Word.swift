@@ -8,6 +8,7 @@ final class Word {
     var japanese: String
     var japaneseFurigana: String
     var english: String
+    var partOfSpeech: String
     var exampleEnglish: String
     var exampleJapanese: String
     var exampleJapaneseFurigana: String
@@ -21,6 +22,7 @@ final class Word {
         japanese: String,
         japaneseFurigana: String,
         english: String,
+        partOfSpeech: String,
         exampleEnglish: String,
         exampleJapanese: String,
         exampleJapaneseFurigana: String
@@ -30,6 +32,7 @@ final class Word {
         self.japanese = japanese
         self.japaneseFurigana = japaneseFurigana
         self.english = english
+        self.partOfSpeech = partOfSpeech
         self.exampleEnglish = exampleEnglish
         self.exampleJapanese = exampleJapanese
         self.exampleJapaneseFurigana = exampleJapaneseFurigana
