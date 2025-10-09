@@ -6,8 +6,6 @@ struct DeckListView: View {
     @State private var isLicensePresented: Bool = false
     @State private var pressedDeckID: Int? = nil
     
-    
-    
     private var decks: [Deck] = Deck.defaultDecks.map { deck in
         Deck(
             id: deck.id,

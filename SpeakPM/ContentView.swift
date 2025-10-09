@@ -10,7 +10,6 @@ import SwiftData
 struct ContentView: View {
     var deckID: Int = 1
     @Environment(\.modelContext) private var context
-//    @Query(sort: \Word.createdAt)
     @State private var words: [Word] = []
 
     @State private var currentIndex: Int = 0
