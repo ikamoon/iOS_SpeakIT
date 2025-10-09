@@ -41,7 +41,7 @@ extension Word {
                 deckID: 2,
                 japanese: "補足",
                 japaneseFurigana: "補足(ほそく)",
-                english: "supplementary, additional",
+                english: "supplementary",
                 partOfSpeech: "n.",
                 exampleEnglish: "Let me add something to what Ken said,",
                 exampleJapanese: "ケンさんの話への補足なんですけど、、、",
@@ -53,7 +53,7 @@ extension Word {
                 japanese: "効果的",
                 japaneseFurigana: "効果的(こうかてき)",
                 english: "effective",
-                partOfSpeech: "ナadj.",
+                partOfSpeech: "adj.",
                 exampleEnglish: "I think this way is effective.",
                 exampleJapanese: "このやり方が効果的だと思います。",
                 exampleJapaneseFurigana: "このやり方(かた)が効果的(こうかてき)だと思(おも)います。"
@@ -96,7 +96,7 @@ extension Word {
                 deckID: 2,
                 japanese: "不具合",
                 japaneseFurigana: "不具合(ふぐあい)",
-                english: "defect, bug",
+                english: "defect",
                 partOfSpeech: "n.",
                 exampleEnglish: "There are some defects, so I'll fix it by the end of the day.",
                 exampleJapanese: "ちょっと不具合があるので、今日中に直します。",
@@ -108,7 +108,7 @@ extension Word {
                 japanese: "順調",
                 japaneseFurigana: "順調(じゅんちょう)",
                 english: "smooth",
-                partOfSpeech: "n/ナadj.",
+                partOfSpeech: "adj.",
                 exampleEnglish: "This is working well.",
                 exampleJapanese: "これは、順調に進んでいます。",
                 exampleJapaneseFurigana: "これは、順調(じゅんちょう)に進(すす)んでいます。"
@@ -130,7 +130,7 @@ extension Word {
                 japanese: "具体的",
                 japaneseFurigana: "具体的(ぐたいてき)",
                 english: "concrete",
-                partOfSpeech: "ナadj.",
+                partOfSpeech: "adj.",
                 exampleEnglish: "Could you expain the incident more concretely?",
                 exampleJapanese: "具体的にどんなインシデントでしたか。",
                 exampleJapaneseFurigana: "具体的(ぐたいてき)にどんなインシデントでしたか。"
@@ -217,7 +217,7 @@ extension Word {
                 deckID: 2,
                 japanese: "認識",
                 japaneseFurigana: "認識(にんしき)",
-                english: "recognition, understanding",
+                english: "recognition",
                 partOfSpeech: "n.",
                 exampleEnglish: "I'd like to make sure everyone's on the same page.",
                 exampleJapanese: "全員で認識を合わせたいです。",
@@ -277,7 +277,40 @@ extension Word {
                 exampleEnglish: "We're planning to do a code review sometime after next week.",
                 exampleJapanese: "コードレビューは、来週以降の予定です",
                 exampleJapaneseFurigana: "コードレビューは、来週(らいしゅう)以降(いこう)の予定(よてい)です。"
-            )
+            ),
+            Word(
+                id: 2025,
+                deckID: 2,
+                japanese: "補足",
+                japaneseFurigana: "補足(ほそく)",
+                english: "additional",
+                partOfSpeech: "n.",
+                exampleEnglish: "Let me add something to what Ken said,",
+                exampleJapanese: "ケンさんの話への補足なんですけど、、、",
+                exampleJapaneseFurigana: "ケンさんの話(はなし)への補足(ほそく)なんですけど、、、"
+            ),
+            Word(
+                id: 2026,
+                deckID: 2,
+                japanese: "不具合",
+                japaneseFurigana: "不具合(ふぐあい)",
+                english: "bug",
+                partOfSpeech: "n.",
+                exampleEnglish: "There are some bugs, so I'll fix it by the end of the day.",
+                exampleJapanese: "ちょっと不具合があるので、今日中に直します。",
+                exampleJapaneseFurigana: "ちょっと不具合(ふぐあい)があるので、今日中(きょうじゅう)に直(なお)します。"
+            ),
+            Word(
+                id: 2027,
+                deckID: 2,
+                japanese: "認識",
+                japaneseFurigana: "認識(にんしき)",
+                english: "understanding",
+                partOfSpeech: "n.",
+                exampleEnglish: "I'd like to make sure everyone's on the same page.",
+                exampleJapanese: "全員で認識を合わせたいです。",
+                exampleJapaneseFurigana: "全員(ぜんいん)で認識(にんしき)を合(あ)わせたいです。"
+            ),
         ]
     }
 }
