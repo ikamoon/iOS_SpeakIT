@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var navigateToDecks: Bool = false
     @Environment(\.dismiss) private var dismiss
     @State private var isLoading: Bool = true
+    @State private var didSpeakFirstOnAppear: Bool = false
     
     init(deckID: Int) {
         self.deckID = deckID
@@ -207,6 +208,11 @@ struct ContentView: View {
 
         words = sorted
         isLoading = false
+        // 遷移直後に最初の単語を一度だけ自動再生
+        if !didSpeakFirstOnAppear, let first = words.first {
+            SpeechService.shared.speakEnglish(first.english)
+            didSpeakFirstOnAppear = true
+        }
         print("Loaded \(words.count) words for deckID: \(deckID)")
     }
 
