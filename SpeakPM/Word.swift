@@ -46,6 +46,8 @@ extension Word {
         switch deckID {
         case 1:
             return list1Decks
+        case 2:
+            return list2Decks
         default :
             return []
         }
