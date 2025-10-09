@@ -1,6 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct LicenseView: View {
+    @Query(sort: \WordReview.updatedAt, order: .reverse)
+    private var reviews: [WordReview]
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
@@ -22,6 +26,41 @@ struct LicenseView: View {
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
+
+                #if DEBUG
+                Divider()
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Debug: WordReview の状況")
+                        .font(.headline)
+
+                    if reviews.isEmpty {
+                        Text("記録なし")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(reviews, id: \.wordID) { r in
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text("wordID: \(r.wordID)")
+                                    Spacer()
+                                    Text("stage: \(r.stage)")
+                                }
+                                HStack {
+                                    Text("count: \(r.reviewCount)")
+                                    Spacer()
+                                    if let next = r.nextReviewAt {
+                                        Text("next: \(next.formatted(date: .abbreviated, time: .shortened))")
+                                    } else {
+                                        Text("next: -")
+                                    }
+                                }
+                            }
+                            .padding(8)
+                            .background(Color(.systemGray6))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                }
+                #endif
             }
             .padding()
         }

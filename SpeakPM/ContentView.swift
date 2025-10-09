@@ -162,7 +162,33 @@ struct ContentView: View {
     private func loadWords() {
         print("loadWords called for deckID: \(deckID)")
         isLoading = true
-        words = Word.getWordsByID(deckID: deckID)
+        // 元データ取得
+        let baseWords = Word.getWordsByID(deckID: deckID)
+
+        // 進捗（復習予定）を取得して並び替え
+        let fetchDescriptor = FetchDescriptor<WordReview>()
+        let reviews: [WordReview] = (try? context.fetch(fetchDescriptor)) ?? []
+        let byID = Dictionary(uniqueKeysWithValues: reviews.map { ($0.wordID, $0) })
+        let now = Date()
+
+        func isDue(_ review: WordReview?) -> Bool {
+            guard let r = review else { return true } // 初回はDue扱い
+            guard let next = r.nextReviewAt else { return true }
+            return next <= now
+        }
+
+        let sorted = baseWords.sorted { a, b in
+            let ra = byID[a.id]
+            let rb = byID[b.id]
+            let aDue = isDue(ra)
+            let bDue = isDue(rb)
+            if aDue != bDue { return aDue && !bDue }
+            let aDate = ra?.nextReviewAt ?? .distantPast
+            let bDate = rb?.nextReviewAt ?? .distantPast
+            return aDate < bDate
+        }
+
+        words = sorted
         isLoading = false
         print("Loaded \(words.count) words for deckID: \(deckID)")
     }
@@ -178,47 +204,48 @@ struct ContentView: View {
 
     private func registerResult(_ value: Int) {
         guard let word = safeCurrentWord else { return }
-        let review: WordReview
+        // wordIDで既存レコードを取得（重複があれば最新を残して整理）
         let fetchDescriptor = FetchDescriptor<WordReview>()
-        if let reviews: [WordReview] = try? context.fetch(fetchDescriptor).filter({ $0.wordID == word.id }) {
-            if reviews.isEmpty {
-                let newReview = WordReview(wordID: word.id)
-                review = newReview
-            } else {
-                review = reviews[0]
+//        let fd = FetchDescriptor<WordReview>(predicate: #Predicate { $0.wordID == word.id })
+        let fetched = (try? context.fetch(fetchDescriptor).filter({ $0.wordID == word.id })) ?? []
+        let review: WordReview
+        if fetched.count > 1 {
+            let keeper = fetched.sorted { $0.updatedAt > $1.updatedAt }.first!
+            for extra in fetched where extra !== keeper {
+                context.delete(extra)
             }
-            review.lastResult = value
-            review.reviewCount += 1
-            review.updatedAt = .init()
-            word.updatedAt = .init()
-            try? context.save()
+            review = keeper
+        } else if let existing = fetched.first {
+            review = existing
+        } else {
+            let newReview = WordReview(wordID: word.id)
+            context.insert(newReview)
+            review = newReview
         }
-    }
 
-//    private func seedIfNeeded() {
-//        if let dID = deckID {
-//            let forDeck = words.filter { $0.deckID == dID }
-//            if !forDeck.isEmpty { return }
-//            let samples = Word.samples.map { sample in
-//                Word(
-//                    id: sample.id,
-//                    deckID: dID,
-//                    japanese: sample.japanese,
-//                    japaneseFurigana: sample.japaneseFurigana,
-//                    english: sample.english,
-//                    exampleEnglish: sample.exampleEnglish,
-//                    exampleJapanese: sample.exampleJapanese,
-//                    exampleJapaneseFurigana: sample.exampleJapaneseFurigana
-//                )
-//            }
-//            for w in samples { context.insert(w) }
-//            try? context.save()
-//        } else {
-//            if !words.isEmpty { return }
-//            for w in Word.samples { context.insert(w) }
-//            try? context.save()
-//        }
-//    }
+        review.lastResult = value
+        review.reviewCount += 1
+        // 学習曲線（Leitner風）: 段階に応じた次回復習間隔
+        let clampedStage = max(0, min(5, review.stage))
+        var nextStage = clampedStage
+        switch value {
+        case 0:
+            nextStage = max(1, clampedStage - 1)
+        case 1:
+            nextStage = min(5, clampedStage + 1)
+        case 2:
+            nextStage = min(5, clampedStage + 1)
+        default:
+            break
+        }
+        review.stage = nextStage
+        // 段階→日数のマッピング
+        let stageDays = [0: 0, 1: 1, 2: 2, 3: 4, 4: 7, 5: 14]
+        let days = stageDays[nextStage] ?? 0
+        review.nextReviewAt = Calendar.current.date(byAdding: .day, value: days, to: Date())
+        review.updatedAt = .init()
+        try? context.save()
+    }
 }
 
 //#Preview {
