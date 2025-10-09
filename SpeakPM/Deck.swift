@@ -26,27 +26,27 @@ extension Deck {
         [
             Deck(
                 id: 1,
-                name: "Engineer Vocabulary List - list_1",
+                name: "リスト①\nEngineer Vocabulary List",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
             Deck(
                 id: 2,
-                name: "Engineer Vocabulary List - list_2",
+                name: "リスト②\nEngineer Vocabulary List",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
             Deck(
                 id: 3,
-                name: "Engineer Vocabulary List - list_3",
+                name: "リスト③\nEngineer Vocabulary List",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
             Deck(
                 id: 4,
-                name: "Engineer Vocabulary List - list_4",
+                name: "リスト④\nEngineer Vocabulary List",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
             Deck(
                 id: 5,
-                name: "Engineer Vocabulary List - list_5",
+                name: "リスト⑤\nEngineer Vocabulary List",
                 licenceText: "Mercari, Inc. 提供 — CC BY 4.0"
             ),
         ]

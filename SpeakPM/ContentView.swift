@@ -36,10 +36,19 @@ struct ContentView: View {
             } else if let word = safeCurrentWord {
                 VStack(spacing: 8) {
                     Spacer()
-                    Text(word.english)
-                        .font(.system(size: 36, weight: .bold))
-                        .multilineTextAlignment(.center)
-                        .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
+                    HStack(spacing: 8) {
+                        Text(word.english)
+                            .font(.system(size: 36, weight: .bold))
+                            .multilineTextAlignment(.center)
+                            .onTapGesture { SpeechService.shared.speakEnglish(word.english) }
+                        Button(action: { SpeechService.shared.speakEnglish(word.english) }) {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(.gray)
+                        }
+                        .accessibilityLabel("英単語を再生")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
 
                     Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
                         .font(.footnote)
@@ -56,18 +65,22 @@ struct ContentView: View {
                                         Text("意味")
                                             .font(.headline)
                                         Text(word.japanese)
-                                        Text(word.japaneseFurigana)
-                                            .foregroundColor(.secondary)
                                     }
                                     Divider()
                                     Group {
                                         Text("例文")
                                             .font(.headline)
-                                        Text(word.exampleEnglish)
-                                            .onTapGesture { SpeechService.shared.speakEnglish(word.exampleEnglish) }
+                                        HStack(spacing: 8) {
+                                            Text(word.exampleEnglish)
+                                                .onTapGesture { SpeechService.shared.speakEnglish(word.exampleEnglish) }
+                                            Button(action: { SpeechService.shared.speakEnglish(word.exampleEnglish) }) {
+                                                Image(systemName: "speaker.wave.2.fill")
+                                                    .font(.system(size: 18))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .accessibilityLabel("例文を再生")
+                                        }
                                         Text(word.exampleJapanese)
-                                        Text(word.exampleJapaneseFurigana)
-                                            .foregroundColor(.secondary)
                                     }
                                     Spacer()
                                     HStack(spacing: 8) {
@@ -79,12 +92,11 @@ struct ContentView: View {
                                     .frame(maxWidth: .infinity, alignment: .center)
                                 } else {
                                     VStack(spacing: 8) {
-                                        Text("タップすると、意味や例文が出ます")
-                                            .foregroundColor(.secondary)
                                         Image(systemName: "hand.tap")
+                                            .font(.system(size: 36))
                                             .foregroundColor(.secondary)
                                     }
-                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .frame(maxWidth: 50, alignment: .center)
                                 }
                             }
                             .padding(16)
@@ -107,7 +119,9 @@ struct ContentView: View {
                                 .padding(.vertical, 12)
                                 .background(Color.red)
                                 .clipShape(Capsule())
+                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                         }
+                        .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
 
                         Button(action: { registerResult(1); nextWord() }) {
                             Text("意味がすぐ\n分かった")
@@ -117,7 +131,9 @@ struct ContentView: View {
                                 .padding(.vertical, 12)
                                 .background(Color.green)
                                 .clipShape(Capsule())
+                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                         }
+                        .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                         
                         Button(action: { registerResult(2); nextWord() }) {
                             Text("瞬間英作文\nできた")
@@ -127,7 +143,9 @@ struct ContentView: View {
                                 .padding(.vertical, 12)
                                 .background(Color.blue)
                                 .clipShape(Capsule())
+                                .shadow(color: Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
                         }
+                        .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                     }
 //                    AdMobBannerView()
 //                        .frame(height: 50)

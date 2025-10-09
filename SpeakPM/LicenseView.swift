@@ -27,14 +27,14 @@ struct LicenseView: View {
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
 
-                #if DEBUG
+//                #if DEBUG
                 Divider()
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Debug: WordReview の状況")
+                    Text("学習進捗")
                         .font(.headline)
 
                     if reviews.isEmpty {
-                        Text("記録なし")
+                        Text("学習記録なし")
                             .foregroundColor(.secondary)
                     } else {
                         ForEach(reviews, id: \.wordID) { r in
@@ -60,7 +60,7 @@ struct LicenseView: View {
                         }
                     }
                 }
-                #endif
+//                #endif
             }
             .padding()
         }
