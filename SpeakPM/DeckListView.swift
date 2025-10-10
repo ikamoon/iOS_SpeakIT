@@ -1,12 +1,12 @@
 import SwiftUI
 import SwiftData
 
+private struct SelectedDeck: Identifiable { let id: Int }
+
 struct DeckListView: View {
     @Environment(\.modelContext) private var context
     @State private var isLicensePresented: Bool = false
-    @State private var pressedDeckID: Int? = nil
-    @State private var selectedDeckID: Int? = nil
-    @State private var isDeckSheetPresented: Bool = false
+    @State private var selectedDeck: SelectedDeck? = nil
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     
     private var decks: [Deck] = Deck.defaultDecks.map { deck in
@@ -32,8 +32,7 @@ struct DeckListView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(decks, id: \.self) { deck in
                         Button {
-                            selectedDeckID = deck.id
-                            isDeckSheetPresented = true
+                            selectedDeck = SelectedDeck(id: deck.id)
                         } label: {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(deck.name)
@@ -51,14 +50,9 @@ struct DeckListView: View {
                                     .fill(themeColor.opacity(0.1))
                                     .shadow(color: themeColor.opacity(0.7), radius: 6, x: 0, y: 3)
                             )
-                            .scaleEffect(pressedDeckID == deck.id ? 0.98 : 1.0)
-                            .animation(.easeOut(duration: 0.08), value: pressedDeckID == deck.id)
-                            .simultaneousGesture(
-                                DragGesture(minimumDistance: 0)
-                                    .onChanged { _ in pressedDeckID = deck.id }
-                                    .onEnded { _ in pressedDeckID = nil }
-                            )
+                            .contentShape(Rectangle())
                         }
+                        .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                     }
                 }
                 .padding(.horizontal)
@@ -85,10 +79,8 @@ struct DeckListView: View {
         .sheet(isPresented: $isLicensePresented) {
             LicenseView()
         }
-        .sheet(isPresented: $isDeckSheetPresented) {
-            if let id = selectedDeckID {
-                ContentView(deckID: id)
-            }
+        .sheet(item: $selectedDeck) { d in
+            ContentView(deckID: d.id)
         }
     }
 }
