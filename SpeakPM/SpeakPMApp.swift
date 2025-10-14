@@ -27,7 +27,8 @@ struct SpeakPMApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                DeckListView()
+                OnboardingWelcomeView()
+//                DeckListView()
             }
         }
         .modelContainer(sharedModelContainer)
