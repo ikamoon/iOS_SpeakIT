@@ -62,12 +62,6 @@ struct ContentView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     
-                    //                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
-                    //                        .font(.footnote)
-                    //                        .foregroundColor(.secondary)
-                    //                        .multilineTextAlignment(.leading)
-                    //                        .padding(.horizontal)
-                    
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color(.systemGray6))
                         .overlay(
@@ -111,9 +105,12 @@ struct ContentView: View {
                                     Divider()
                                     
                                     VStack {
-                                        Text("自分の例文")
-                                            .font(.headline)
-                                            .padding(.top, 8)
+                                        HStack {
+                                            Text("自分の例文")
+                                                .font(.headline)
+                                                .padding(.top, 8)
+                                            Spacer()
+                                        }
                                         if userExamples.isEmpty {
                                             Text("保存した例文はありません")
                                                 .foregroundColor(.secondary)
