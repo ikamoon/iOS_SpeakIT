@@ -21,6 +21,7 @@ struct ContentView: View {
     @State private var generatedExample: String? = nil
     @State private var isGenerating: Bool = false
     @State private var generationError: String? = nil
+    @StateObject private var onboardingStore = OnboardingStore()
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     private let pastelGreen = Color(red: 128/255.0, green: 255/255.0, blue: 128/255.0)
     private let pastelBlue = Color(red: 148/255.0, green: 219/255.0, blue: 255/255.0)
@@ -312,12 +313,42 @@ struct ContentView: View {
         try? context.save()
     }
     
-    // Add the function to call OpenAI API:
+    // OpenAI API を使って、speakit.profileに基づく例文を生成
     private func generateExample(for word: String) {
         isGenerating = true
         generationError = nil
         generatedExample = nil
-        let prompt = "英単語 '" + word + "' を使った自然な英語例文を1つ生成してください。"
+        // speakit.profile（オンボード保存）を参照
+        let p = onboardingStore.profile
+        let roles = p.roles.isEmpty ? "不明" : p.roles.joined(separator: ", ")
+        let level: String = {
+            let lv = p.level.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            switch lv {
+            case "BASIC": return "BASIC"
+            case "INTERMEDIATE", "WORKING": return "INTERMEDIATE"
+            case "FLUENT": return "FLUENT"
+            default: return "INTERMEDIATE"
+            }
+        }()
+        let situations = p.situations.isEmpty ? "一般的な業務会話" : p.situations.joined(separator: ", ")
+        let goal = p.customGoal.isEmpty ? "IT業務で英語を話せるようにする" : p.customGoal
+
+        let systemPrompt = """
+        あなたはIT分野の英語チューターです。以下の speakit.profile を参考に、文脈と難易度を調整してください。
+        roles: \(roles)
+        level: \(level)
+        situations: \(situations)
+        goal: \(goal)
+
+        制約:
+        - 英単語 '\(word)' を1回だけ含む自然な英文を1つ出力。
+        - 難易度: BASIC→CEFR A2, INTERMEDIATE→B1-B2, FLUENT→C1。
+        - 可能なら roles と situations に関連する職務・場面の文脈にする。
+        - 出力は英語のみ。引用符、説明、日本語訳は含めない。
+        - 語数の目安: BASIC≤14語, INTERMEDIATE≤20語, FLUENT≤26語。
+        """
+
+        let userPrompt = "上記条件で英文を1文だけ生成してください。"
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -325,7 +356,10 @@ struct ContentView: View {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let body: [String: Any] = [
             "model": "gpt-3.5-turbo",
-            "messages": [["role": "user", "content": prompt]],
+            "messages": [
+                ["role": "system", "content": systemPrompt],
+                ["role": "user", "content": userPrompt]
+            ],
             "max_tokens": 64
         ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
