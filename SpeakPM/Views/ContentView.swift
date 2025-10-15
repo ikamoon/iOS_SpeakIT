@@ -121,9 +121,9 @@ struct ContentView: View {
                                             ForEach(userExamples, id: \.usersExamplesID) { ex in
                                                 VStack(alignment: .leading, spacing: 6) {
                                                     HStack(spacing: 8) {
-                                                        Text(ex.example)
-                                                            .onTapGesture { SpeechService.shared.speakEnglish(ex.example) }
-                                                        Button(action: { SpeechService.shared.speakEnglish(ex.example) }) {
+                                                        Text(ex.exampleEn)
+                                                            .onTapGesture { SpeechService.shared.speakEnglish(ex.exampleEn) }
+                                                        Button(action: { SpeechService.shared.speakEnglish(ex.exampleEn) }) {
                                                             Image(systemName: "speaker.wave.2.fill")
                                                                 .font(.system(size: 18))
                                                                 .foregroundColor(.gray)
@@ -406,7 +406,7 @@ struct ContentView: View {
     }
     
     private func saveUserExample(wordID: Int, en: String, ja: String?) {
-        let record = UsersExamples(wordID: wordID, example: en, exampleJa: ja)
+        let record = UsersExamples(wordID: wordID, exampleEn: en, exampleJa: ja)
         context.insert(record)
         try? context.save()
         loadStoredUserExamples(for: wordID)

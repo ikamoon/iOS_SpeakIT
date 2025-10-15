@@ -27,9 +27,9 @@ struct OnboardingGoalView: View {
 
             FlexibleChips(items: tags, selected: $selectedSituations)
 
-            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
-                .textFieldStyle(.roundedBorder)
-                .padding(.top, 12)
+//            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
+//                .textFieldStyle(.roundedBorder)
+//                .padding(.top, 12)
 
             Spacer()
 

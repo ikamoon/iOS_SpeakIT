@@ -5,15 +5,15 @@ import SwiftData
 final class UsersExamples {
     var wordID: Int
     var usersExamplesID: UUID
-    var example: String
+    var exampleEn: String
     var exampleJa: String?
     var createdAt: Date
     var updatedAt: Date
 
-    init(wordID: Int, example: String, exampleJa: String? = nil) {
+    init(wordID: Int, exampleEn: String, exampleJa: String? = nil) {
         self.wordID = wordID
         self.usersExamplesID = UUID()
-        self.example = example
+        self.exampleEn = exampleEn
         self.exampleJa = exampleJa
         self.createdAt = .init()
         self.updatedAt = .init()
