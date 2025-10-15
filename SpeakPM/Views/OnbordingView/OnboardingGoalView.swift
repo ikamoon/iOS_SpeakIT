@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingGoalView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var store = OnboardingStore()
-    @State private var selectedSituations: Set<String> = []
+    @State private var selectedSituations: [String] = []
     @State private var customText = ""
     @State private var goNext = false
 
@@ -28,10 +28,15 @@ struct OnboardingGoalView: View {
 
 //            FlowLayout(items: tags) { tag in
                 FlexibleChips(items: tags, selected: Binding(
-                    get: { Set(store.profile.situations) },
-                    set: { store.profile.situations = Array($0) }
+                    get: {
+                        Set(store.profile.situations)
+                    },
+                    set: {
+                        store.profile.situations = Array($0)
+                    }
                 ))
                 
+            
 //                FlexibleChips(title: tag, isSelected: selectedSituations.contains(tag)) {
 //                    if selectedSituations.contains(tag) {
 //                        selectedSituations.remove(tag)
@@ -48,6 +53,8 @@ struct OnboardingGoalView: View {
             Spacer()
 
             Button("完了", action: {
+                store.profile.situations = selectedSituations
+                store.save()
                 UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
                 
                 let scenes = UIApplication.shared.connectedScenes
