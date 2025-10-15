@@ -11,7 +11,7 @@ struct ContentView: View {
     var deckID: Int = 1
     @Environment(\.modelContext) private var context
     @State private var words: [Word] = []
-
+    
     @State private var currentIndex: Int = 0
     @State private var isRevealed: Bool = false
     @State private var navigateToDecks: Bool = false
@@ -24,6 +24,7 @@ struct ContentView: View {
     @StateObject private var onboardingStore = OnboardingStore()
     @State private var isExampleEditorPresented: Bool = false
     @State private var exampleEditorText: String = ""
+    @State private var userExamples: [UsersExamples] = []
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     private let pastelGreen = Color(red: 128/255.0, green: 255/255.0, blue: 128/255.0)
     private let pastelBlue = Color(red: 148/255.0, green: 219/255.0, blue: 255/255.0)
@@ -32,7 +33,7 @@ struct ContentView: View {
     init(deckID: Int) {
         self.deckID = deckID
     }
-
+    
     var body: some View {
         VStack(spacing: 16) {
             let safeCurrentWord = words.indices.contains(currentIndex) ? words[currentIndex] : nil
@@ -60,13 +61,13 @@ struct ContentView: View {
                         .accessibilityLabel("英単語を再生")
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
-
-//                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
-//                        .font(.footnote)
-//                        .foregroundColor(.secondary)
-//                        .multilineTextAlignment(.leading)
-//                        .padding(.horizontal)
-
+                    
+                    //                    Text("💡学習のヒント：\n受動語彙を増やしたい→単語を発音してみる。\n能動語彙を増やしたい→単語を使って例文を作って、喋ってみる")
+                    //                        .font(.footnote)
+                    //                        .foregroundColor(.secondary)
+                    //                        .multilineTextAlignment(.leading)
+                    //                        .padding(.horizontal)
+                    
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color(.systemGray6))
                         .overlay(
@@ -96,14 +97,39 @@ struct ContentView: View {
                                     
                                     if let example = generatedExample {
                                         HStack(spacing: 8) {
-                                            Text(generatedExample ?? word.exampleEnglish)
-                                                .onTapGesture { SpeechService.shared.speakEnglish(generatedExample ?? word.exampleEnglish) }
-                                            Button(action: { SpeechService.shared.speakEnglish(generatedExample ?? word.exampleEnglish) }) {
+                                            Text(example)
+                                                .onTapGesture { SpeechService.shared.speakEnglish(example) }
+                                            Button(action: { SpeechService.shared.speakEnglish(example) }) {
                                                 Image(systemName: "speaker.wave.2.fill")
                                                     .font(.system(size: 18))
                                                     .foregroundColor(.gray)
                                             }
                                             .accessibilityLabel("例文を再生")
+                                        }
+                                    }
+                                    
+                                    Divider()
+                                    
+                                    VStack {
+                                        Text("自分の例文")
+                                            .font(.headline)
+                                            .padding(.top, 8)
+                                        if userExamples.isEmpty {
+                                            Text("保存した例文はありません")
+                                                .foregroundColor(.secondary)
+                                        } else {
+                                            ForEach(userExamples, id: \.usersExamplesID) { ex in
+                                                HStack(spacing: 8) {
+                                                    Text(ex.example)
+                                                        .onTapGesture { SpeechService.shared.speakEnglish(ex.example) }
+                                                    Button(action: { SpeechService.shared.speakEnglish(ex.example) }) {
+                                                        Image(systemName: "speaker.wave.2.fill")
+                                                            .font(.system(size: 18))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    .accessibilityLabel("例文を再生")
+                                                }
+                                            }
                                         }
                                     }
                                     
@@ -136,8 +162,8 @@ struct ContentView: View {
                                             .font(.footnote)
                                             .foregroundColor(.secondary)
                                             .frame(maxWidth: .infinity)
-//                                            .frame(maxWidth: 200, alignment: .init(horizontal: .center, vertical: .top))
-//                                            .multilineTextAlignment(.leading)
+                                        //                                            .frame(maxWidth: 200, alignment: .init(horizontal: .center, vertical: .top))
+                                        //                                            .multilineTextAlignment(.leading)
                                             .padding(.horizontal)
                                         Image(systemName: "hand.tap")
                                             .font(.system(size: 36))
@@ -146,14 +172,14 @@ struct ContentView: View {
                                     .frame(maxWidth: 300, alignment: .center)
                                 }
                             }
-                            .padding(16)
+                                .padding(16)
                         )
                         .frame(maxWidth: .infinity)
                         .frame(maxHeight: .infinity)
                         .onTapGesture { isRevealed.toggle() }
                         .padding(.horizontal)
                 }
-
+                
                 VStack(spacing: 12) {
                     HStack(spacing: 12) {
                         Button(action: { registerResult(0); nextWord() }) {
@@ -167,7 +193,7 @@ struct ContentView: View {
                                 .shadow(color: pastelGreen.opacity(0.6), radius: 6, x: 0, y: 3)
                         }
                         .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
-
+                        
                         Button(action: { registerResult(1); nextWord() }) {
                             Text("意味がすぐ\n分かった")
                                 .font(.headline)
@@ -192,8 +218,8 @@ struct ContentView: View {
                         }
                         .buttonStyle(PressedScaleButtonStyle(scale: 0.98))
                     }
-//                    AdMobBannerView()
-//                        .frame(height: 50)
+                    //                    AdMobBannerView()
+                    //                        .frame(height: 50)
                 }
                 .padding(.horizontal)
             } else {
@@ -211,71 +237,71 @@ struct ContentView: View {
         }
         .onChange(of: currentIndex) { _ in
             if let w = safeCurrentWord {
-                loadStoredUserExample(for: w.id)
+                loadStoredUserExamples(for: w.id)
             }
         }
-                .sheet(isPresented: $isExampleEditorPresented) {
-                    NavigationStack {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("生成された例文を編集")
-                                .font(.headline)
-                            TextEditor(text: $exampleEditorText)
-                                .frame(minHeight: 160)
-                                .padding(12)
-                                .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
-                            Spacer()
-                        }
-                        .padding()
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("キャンセル") { isExampleEditorPresented = false }
+        .sheet(isPresented: $isExampleEditorPresented) {
+            NavigationStack {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("生成された例文を編集")
+                        .font(.headline)
+                    TextEditor(text: $exampleEditorText)
+                        .frame(minHeight: 160)
+                        .padding(12)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
+                    Spacer()
+                }
+                .padding()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("キャンセル") { isExampleEditorPresented = false }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("保存") {
+                            let trimmed = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if let w = safeCurrentWord {
+                                saveUserExample(wordID: w.id, text: trimmed)
                             }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("保存") {
-                                    let trimmed = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
-                                    generatedExample = trimmed
-                                    if let w = safeCurrentWord {
-                                        saveUserExample(wordID: w.id, text: trimmed)
-                                    }
-                                    isExampleEditorPresented = false
-                                }
-                            }
+                            generatedExample = nil
+                            isExampleEditorPresented = false
                         }
                     }
-                    .presentationDetents([.medium, .large])
                 }
+            }
+            .presentationDetents([.medium, .large])
+        }
     }
-
+    
     private var activeWords: [Word] {
-//        if let deckID = deckID { return words.filter { $0.deckID == deckID } }
+        //        if let deckID = deckID { return words.filter { $0.deckID == deckID } }
         return words
     }
-
+    
     private var safeCurrentWord: Word? {
         guard !activeWords.isEmpty else { return nil }
         let index = min(max(0, currentIndex), activeWords.count - 1)
         return activeWords[index]
     }
-
+    
     private func loadWords() {
         print("loadWords called for deckID: \(deckID)")
         isLoading = true
         // 元データ取得
         let baseWords = Word.getWordsByID(deckID: deckID)
-
+        
         // 進捗（復習予定）を取得して並び替え
         let fetchDescriptor = FetchDescriptor<WordReview>()
         let reviews: [WordReview] = (try? context.fetch(fetchDescriptor)) ?? []
         let byID = Dictionary(uniqueKeysWithValues: reviews.map { ($0.wordID, $0) })
         let now = Date()
-
+        
         func isDue(_ review: WordReview?) -> Bool {
             guard let r = review else { return true } // 初回はDue扱い
             guard let next = r.nextReviewAt else { return true }
             return next <= now
         }
-
+        
         let sorted = baseWords.sorted { a, b in
             let ra = byID[a.id]
             let rb = byID[b.id]
@@ -286,7 +312,7 @@ struct ContentView: View {
             let bDate = rb?.nextReviewAt ?? .distantPast
             return aDate < bDate
         }
-
+        
         words = sorted
         isLoading = false
         // 遷移直後に最初の単語を一度だけ自動再生
@@ -294,10 +320,10 @@ struct ContentView: View {
             SpeechService.shared.speakEnglish(first.english)
             didSpeakFirstOnAppear = true
         }
-        if let first = words.first { loadStoredUserExample(for: first.id) }
+        if let first = words.first { loadStoredUserExamples(for: first.id) }
         print("Loaded \(words.count) words for deckID: \(deckID)")
     }
-
+    
     private func nextWord() {
         guard !activeWords.isEmpty else { return }
         let wasLast = currentIndex == activeWords.count - 1
@@ -306,12 +332,12 @@ struct ContentView: View {
         if wasLast { dismiss(); return }
         if let w = safeCurrentWord { SpeechService.shared.speakEnglish(w.english) }
     }
-
+    
     private func registerResult(_ value: Int) {
         guard let word = safeCurrentWord else { return }
         // wordIDで既存レコードを取得（重複があれば最新を残して整理）
         let fetchDescriptor = FetchDescriptor<WordReview>()
-//        let fd = FetchDescriptor<WordReview>(predicate: #Predicate { $0.wordID == word.id })
+        //        let fd = FetchDescriptor<WordReview>(predicate: #Predicate { $0.wordID == word.id })
         let fetched = (try? context.fetch(fetchDescriptor).filter({ $0.wordID == word.id })) ?? []
         let review: WordReview
         if fetched.count > 1 {
@@ -327,7 +353,7 @@ struct ContentView: View {
             context.insert(newReview)
             review = newReview
         }
-
+        
         review.lastResult = value
         review.reviewCount += 1
         // 学習曲線（Leitner風）: 段階に応じた次回復習間隔
@@ -371,14 +397,14 @@ struct ContentView: View {
         }()
         let situations = p.situations.isEmpty ? "一般的な業務会話" : p.situations.joined(separator: ", ")
         let goal = p.customGoal.isEmpty ? "IT業務で英語を話せるようにする" : p.customGoal
-
+        
         let systemPrompt = """
         あなたはIT分野の英語チューターです。以下の speakit.profile を参考に、文脈と難易度を調整してください。
         roles: \(roles)
         level: \(level)
         situations: \(situations)
         goal: \(goal)
-
+        
         制約:
         - 英単語 '\(word)' を1回だけ含む自然な英文を1つ出力。
         - 難易度: BASIC→CEFR A2, INTERMEDIATE→B1-B2, FLUENT→C1。
@@ -386,7 +412,7 @@ struct ContentView: View {
         - 出力は英語のみ。引用符、説明、日本語訳は含めない。
         - 語数の目安: BASIC≤14語, INTERMEDIATE≤20語, FLUENT≤26語。
         """
-
+        
         let userPrompt = "上記条件で英文を1文だけ生成してください。"
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else { return }
         var request = URLRequest(url: url)
@@ -426,22 +452,16 @@ struct ContentView: View {
     }
     
     private func saveUserExample(wordID: Int, text: String) {
-        let fetchDescriptor = FetchDescriptor<UsersExamples>()
-        let fetched = (try? context.fetch(fetchDescriptor).filter({ $0.wordID == wordID })) ?? []
-        if let existing = fetched.first {
-            existing.example = text
-            existing.updatedAt = .init()
-        } else {
-            let record = UsersExamples(wordID: wordID, text: text)
-            context.insert(record)
-        }
+        let record = UsersExamples(wordID: wordID, example: text)
+        context.insert(record)
         try? context.save()
+        loadStoredUserExamples(for: wordID)
     }
-
-    private func loadStoredUserExample(for wordID: Int) {
-        let fd = FetchDescriptor<UsersExamples>(predicate: #Predicate { $0.wordID == wordID })
+    
+    private func loadStoredUserExamples(for wordID: Int) {
+        let fd = FetchDescriptor<UsersExamples>(predicate: #Predicate<UsersExamples> { $0.wordID == wordID })
         let fetched = (try? context.fetch(fd)) ?? []
-        generatedExample = fetched.first?.example
+        userExamples = fetched.sorted { $0.updatedAt > $1.updatedAt }
     }
 }
 
