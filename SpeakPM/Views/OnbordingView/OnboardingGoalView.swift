@@ -29,10 +29,10 @@ struct OnboardingGoalView: View {
         "リリース",
         "ドキュメント",
         "設計レビュー",
-        "メール",
+//        "メール",
         "1on1",
         "外部折衝",
-        "オフサイト",
+//        "オフサイト",
         "バグ報告"
     ]
 
@@ -41,7 +41,14 @@ struct OnboardingGoalView: View {
             Text("英語で話したい場面を教えてください")
                 .font(.title2.bold())
 
-            FlexibleChips(items: tags, selected: $selectedSituations)
+            ScrollView {
+                FlexibleChips(items: tags, selected: $selectedSituations)
+//                    .frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+//            .frame(height: 300)
+            .frame(alignment: .bottomTrailing)
+//            .frame(height: 300, alignment: .top)
+            .scrollIndicators(.hidden)
 
 //            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
 //                .textFieldStyle(.roundedBorder)
@@ -117,6 +124,17 @@ struct FlowLayout<Data: RandomAccessCollection, Content: View>: View where Data.
                 }
             }
         }
-        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
 }
+
+#if DEBUG
+struct OnboardingGoalView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            OnboardingGoalView()
+        }
+        .previewDisplayName("OnboardingGoalView Preview")
+    }
+}
+#endif
