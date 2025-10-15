@@ -41,14 +41,13 @@ struct OnboardingGoalView: View {
             Text("英語で話したい場面を教えてください")
                 .font(.title2.bold())
 
-            ScrollView {
+//            ScrollView {
                 FlexibleChips(items: tags, selected: $selectedSituations)
 //                    .frame(maxWidth: .infinity, alignment: .topLeading)
-            }
-//            .frame(height: 300)
-            .frame(alignment: .bottomTrailing)
+//            }
+//            .frame(alignment: .bottomTrailing)
 //            .frame(height: 300, alignment: .top)
-            .scrollIndicators(.hidden)
+//            .scrollIndicators(.hidden)
 
 //            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
 //                .textFieldStyle(.roundedBorder)

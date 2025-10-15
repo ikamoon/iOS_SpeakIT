@@ -29,17 +29,21 @@ struct OnboardingLevelView: View {
             
             Spacer()
             
-            Button("次へ", action: {
+            Button(action: {
                 store.profile.level = level == 1 ? "BASIC" : (level == 2 ? "INTERMEDIATE" : "FLUENT")
                 store.save()
                 
                 goNext = true
-            })
-            .buttonStyle(.borderedProminent)
-            .frame(maxWidth: .infinity)
-            .navigationDestination(isPresented: $goNext) {
-                OnboardingGoalView()
+            }) {
+                Text("次へ")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(LinearGradient(colors: [.blue, .indigo], startPoint: .leading, endPoint: .trailing))
+                    .cornerRadius(16)
+                    .foregroundColor(.white)
             }
+            .padding(.horizontal, 32)
         }
         .padding()
         .onAppear {
@@ -49,6 +53,9 @@ struct OnboardingLevelView: View {
             case "FLUENT": level = 3
             default: level = 2
             }
+        }
+        .navigationDestination(isPresented: $goNext) {
+            OnboardingGoalView()
         }
     }
 

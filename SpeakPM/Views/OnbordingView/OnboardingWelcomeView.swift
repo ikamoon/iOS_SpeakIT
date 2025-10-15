@@ -30,10 +30,6 @@ struct OnboardingWelcomeView: View {
 
                 Spacer()
 
-            
-//                NavigationLink(destination: next(), isActive: $goNext) {
-//                    EmptyView()
-//                }
                 Button(action: {
                     goNext = true
                 }) {

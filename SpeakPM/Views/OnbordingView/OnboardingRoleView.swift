@@ -44,20 +44,25 @@ struct OnboardingRoleView: View {
 
             Spacer()
 
-            
-            Button("次へ", action: {
+            Button(action: {
                 store.profile.roles = selectedRoleTitles
                 store.save()
                 
                 goNext = true
-            })
-            .buttonStyle(.borderedProminent)
-            .frame(maxWidth: .infinity)
-            .navigationDestination(isPresented: $goNext) {
-                OnboardingLevelView()
+            }) {
+                Text("次へ")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(LinearGradient(colors: [.blue, .indigo], startPoint: .leading, endPoint: .trailing))
+                    .cornerRadius(16)
+                    .foregroundColor(.white)
             }
+            .padding(.horizontal, 32)
         }
-        .padding()
+        .padding().navigationDestination(isPresented: $goNext) {
+            OnboardingLevelView()
+        }
     }
 }
 

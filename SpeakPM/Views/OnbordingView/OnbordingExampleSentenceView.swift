@@ -58,19 +58,30 @@ struct OnbordingExampleSentenceView: View {
                 }
             }
 
+            #if DEBUG
             HStack {
                 Button("再生成") { generateExamples() }
                     .buttonStyle(.bordered)
                 Spacer()
-                Button("はじめる") {
-                    UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-                    let scenes = UIApplication.shared.connectedScenes
-                    let windowScene = scenes.first as? UIWindowScene
-                    let window = windowScene?.windows.first
-                    window?.rootViewController?.dismiss(animated: true)
-                }
-                .buttonStyle(.borderedProminent)
             }
+            #endif
+            
+            Button(action: {
+                UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+                let scenes = UIApplication.shared.connectedScenes
+                let windowScene = scenes.first as? UIWindowScene
+                let window = windowScene?.windows.first
+                window?.rootViewController?.dismiss(animated: true)
+            }) {
+                Text("IT現場の英語をはじめる")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(LinearGradient(colors: [.blue, .indigo], startPoint: .leading, endPoint: .trailing))
+                    .cornerRadius(16)
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 32)
         }
         .padding()
         .onAppear { generateExamples() }
