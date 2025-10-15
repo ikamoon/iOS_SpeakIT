@@ -9,8 +9,8 @@ import SwiftUI
 
 struct OnboardingRoleView: View {
     @State private var selectedRoles: Set<String> = []
-    @State private var showDeckList = false
-
+    @State private var goNext = false
+    
     let roles = [
         ("💼", "PM / PdM"),
         ("🧑‍💻", "エンジニア"),
@@ -41,12 +41,12 @@ struct OnboardingRoleView: View {
 
             
             Button("次へ", action: {
-                showDeckList = true
+                goNext = true
             })
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)
-            .navigationDestination(isPresented: $showDeckList) {
-                DeckListView()
+            .navigationDestination(isPresented: $goNext) {
+                OnboardingLevelView()
             }
         }
         .padding()
