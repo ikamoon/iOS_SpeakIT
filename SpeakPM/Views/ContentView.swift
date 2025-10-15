@@ -22,6 +22,8 @@ struct ContentView: View {
     @State private var isGenerating: Bool = false
     @State private var generationError: String? = nil
     @StateObject private var onboardingStore = OnboardingStore()
+    @State private var isExampleEditorPresented: Bool = false
+    @State private var exampleEditorText: String = ""
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     private let pastelGreen = Color(red: 128/255.0, green: 255/255.0, blue: 128/255.0)
     private let pastelBlue = Color(red: 148/255.0, green: 219/255.0, blue: 255/255.0)
@@ -207,6 +209,33 @@ struct ContentView: View {
         .task(id: deckID) {
             loadWords()
         }
+        .sheet(isPresented: $isExampleEditorPresented) {
+            NavigationStack {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("生成された例文を編集")
+                        .font(.headline)
+                    TextEditor(text: $exampleEditorText)
+                        .frame(minHeight: 160)
+                        .padding(12)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
+                    Spacer()
+                }
+                .padding()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("キャンセル") { isExampleEditorPresented = false }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("保存") {
+                            generatedExample = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            isExampleEditorPresented = false
+                        }
+                    }
+                }
+            }
+            .presentationDetents([.medium, .large])
+        }
     }
 
     private var activeWords: [Word] {
@@ -378,7 +407,10 @@ struct ContentView: View {
                     generationError = "AI例文の取得に失敗しました"
                     return
                 }
-                generatedExample = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                generatedExample = trimmed
+                exampleEditorText = trimmed
+                isExampleEditorPresented = true
             }
         }.resume()
     }
