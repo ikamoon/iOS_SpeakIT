@@ -396,7 +396,7 @@ struct ContentView: View {
         let goal = p.customGoal.isEmpty ? "IT業務で英語を話せるようにする" : p.customGoal
         
         let systemPrompt = """
-        あなたはIT分野の英語チューターです。以下の speakit.profile を参考に、文脈と難易度を調整してください。
+        あなたはIT分野の英語チューターです。以下を参考に、文脈と難易度を調整してください。
         roles: \(roles)
         level: \(level)
         situations: \(situations)

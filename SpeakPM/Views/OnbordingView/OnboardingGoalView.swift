@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingGoalView: View {
     @StateObject var store = OnboardingStore()
-    @State private var selectedSituations: [String] = []
+    @State private var selectedSituations: Set<String> = []
     @State private var customText = ""
     @State private var goNext = false
 
@@ -25,38 +25,18 @@ struct OnboardingGoalView: View {
             Text("英語で話したい場面を教えてください")
                 .font(.title2.bold())
 
-//            FlowLayout(items: tags) { tag in
-                FlexibleChips(items: tags, selected: Binding(
-                    get: {
-                        Set(store.profile.situations)
-                    },
-                    set: {
-                        store.profile.situations = Array($0)
-                    }
-                ))
-                
-            
-//                FlexibleChips(title: tag, isSelected: selectedSituations.contains(tag)) {
-//                    if selectedSituations.contains(tag) {
-//                        selectedSituations.remove(tag)
-//                    } else {
-//                        selectedSituations.insert(tag)
-//                    }
-//                }
-//            }
-
             TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
                 .textFieldStyle(.roundedBorder)
                 .padding(.top, 12)
 
             Spacer()
 
-            Button("完了", action: {
-                store.profile.situations = selectedSituations
+            Button("完了") {
+                store.profile.situations = Array(selectedSituations)
                 store.save()
                 
                 goNext = true
-            })
+            }
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)
         }
@@ -78,11 +58,14 @@ struct FlexibleChips: View {
                 if isOn { selected.remove(item) } else { selected.insert(item) }
             } label: {
                 Text(item)
-                    .padding(.horizontal, 12).padding(.vertical, 8)
-                    .background(isOn ? Color.blue.opacity(0.15) : Color.gray.opacity(0.12))
-                    .foregroundColor(isOn ? .blue : .primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(isOn ? Color.blue : Color.gray.opacity(0.12))
+                    .foregroundColor(isOn ? .white : .primary)
                     .clipShape(Capsule())
-                    .overlay(Capsule().stroke(isOn ? Color.blue : Color.gray.opacity(0.2)))
+                    .overlay(Capsule().stroke(isOn ? Color.blue : Color.gray.opacity(0.2), lineWidth: 1))
+                    .animation(.easeInOut(duration: 0.15), value: isOn)
+                    .contentShape(Capsule())
             }
         }
     }
