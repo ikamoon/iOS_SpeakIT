@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct OnboardingGoalView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject var store = OnboardingStore()
     @State private var selectedSituations: [String] = []
     @State private var customText = ""
@@ -55,17 +54,16 @@ struct OnboardingGoalView: View {
             Button("完了", action: {
                 store.profile.situations = selectedSituations
                 store.save()
-                UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
                 
-                let scenes = UIApplication.shared.connectedScenes
-                let windowScene = scenes.first as? UIWindowScene
-                let window = windowScene?.windows.first
-                window?.rootViewController?.dismiss(animated: true)
+                goNext = true
             })
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)
         }
         .padding()
+        .navigationDestination(isPresented: $goNext) {
+            OnbordingExampleSentenceView()
+        }
     }
 }
 
