@@ -209,33 +209,42 @@ struct ContentView: View {
         .task(id: deckID) {
             loadWords()
         }
-        .sheet(isPresented: $isExampleEditorPresented) {
-            NavigationStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("生成された例文を編集")
-                        .font(.headline)
-                    TextEditor(text: $exampleEditorText)
-                        .frame(minHeight: 160)
-                        .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
-                    Spacer()
-                }
-                .padding()
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("キャンセル") { isExampleEditorPresented = false }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("保存") {
-                            generatedExample = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
-                            isExampleEditorPresented = false
+        .onChange(of: currentIndex) { _ in
+            if let w = safeCurrentWord {
+                loadStoredUserExample(for: w.id)
+            }
+        }
+                .sheet(isPresented: $isExampleEditorPresented) {
+                    NavigationStack {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("生成された例文を編集")
+                                .font(.headline)
+                            TextEditor(text: $exampleEditorText)
+                                .frame(minHeight: 160)
+                                .padding(12)
+                                .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
+                            Spacer()
+                        }
+                        .padding()
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("キャンセル") { isExampleEditorPresented = false }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("保存") {
+                                    let trimmed = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
+                                    generatedExample = trimmed
+                                    if let w = safeCurrentWord {
+                                        saveUserExample(wordID: w.id, text: trimmed)
+                                    }
+                                    isExampleEditorPresented = false
+                                }
+                            }
                         }
                     }
+                    .presentationDetents([.medium, .large])
                 }
-            }
-            .presentationDetents([.medium, .large])
-        }
     }
 
     private var activeWords: [Word] {
@@ -285,6 +294,7 @@ struct ContentView: View {
             SpeechService.shared.speakEnglish(first.english)
             didSpeakFirstOnAppear = true
         }
+        if let first = words.first { loadStoredUserExample(for: first.id) }
         print("Loaded \(words.count) words for deckID: \(deckID)")
     }
 
@@ -413,6 +423,25 @@ struct ContentView: View {
                 isExampleEditorPresented = true
             }
         }.resume()
+    }
+    
+    private func saveUserExample(wordID: Int, text: String) {
+        let fetchDescriptor = FetchDescriptor<UsersExamples>()
+        let fetched = (try? context.fetch(fetchDescriptor).filter({ $0.wordID == wordID })) ?? []
+        if let existing = fetched.first {
+            existing.example = text
+            existing.updatedAt = .init()
+        } else {
+            let record = UsersExamples(wordID: wordID, text: text)
+            context.insert(record)
+        }
+        try? context.save()
+    }
+
+    private func loadStoredUserExample(for wordID: Int) {
+        let fd = FetchDescriptor<UsersExamples>(predicate: #Predicate { $0.wordID == wordID })
+        let fetched = (try? context.fetch(fd)) ?? []
+        generatedExample = fetched.first?.example
     }
 }
 

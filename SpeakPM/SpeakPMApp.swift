@@ -14,6 +14,7 @@ struct SpeakPMApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             WordReview.self,
+            UsersExamples.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
