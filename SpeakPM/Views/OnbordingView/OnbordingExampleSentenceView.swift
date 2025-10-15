@@ -110,6 +110,48 @@ struct OnbordingExampleSentenceView: View {
                 if selected.contains("顧客対応") {
                     pool.append(("I'll follow up with the customer and share the timeline.", "お客様へフォローし、スケジュールを共有します。"))
                 }
+                if selected.contains("日程調整") {
+                    pool.append(("Does tomorrow afternoon work for you?", "明日の午後はご都合いかがですか？"))
+                }
+                if selected.contains("プレゼン") {
+                    pool.append(("I'll walk you through the proposal with slides.", "スライドで提案内容をご説明します。"))
+                }
+                if selected.contains("障害対応") {
+                    pool.append(("We detected an incident; we're investigating the root cause.", "インシデントを検知し、原因を調査しています。"))
+                }
+                if selected.contains("要件定義") {
+                    pool.append(("Let's clarify the scope and non-functional requirements.", "スコープと非機能要件を明確にしましょう。"))
+                }
+                if selected.contains("仕様相談") {
+                    pool.append(("Could we discuss the edge cases and constraints?", "仕様のエッジケースと制約について相談できますか？"))
+                }
+                if selected.contains("見積り") {
+                    pool.append(("I'll provide a rough estimate by end of day.", "本日中に概算見積りをお送りします。"))
+                }
+                if selected.contains("リリース") {
+                    pool.append(("The release is scheduled for Friday 5 PM JST.", "リリースは金曜の17時（JST）を予定しています。"))
+                }
+                if selected.contains("ドキュメント") {
+                    pool.append(("Please document the API changes and update the README.", "APIの変更点をドキュメント化し、READMEを更新してください。"))
+                }
+                if selected.contains("設計レビュー") {
+                    pool.append(("Can you review the architecture diagram and trade-offs?", "アーキテクチャ図とトレードオフのレビューをお願いします。"))
+                }
+                if selected.contains("メール") {
+                    pool.append(("I'll follow up via email with the summary.", "要点をメールでフォローします。"))
+                }
+                if selected.contains("1on1") {
+                    pool.append(("In our 1-on-1, I'd like feedback on my communication.", "1on1では、コミュニケーションのフィードバックをいただきたいです。"))
+                }
+                if selected.contains("外部折衝") {
+                    pool.append(("I'll negotiate the terms and share the revised contract.", "条件交渉を行い、修正契約書を共有します。"))
+                }
+                if selected.contains("オフサイト") {
+                    pool.append(("Let's plan the offsite agenda and logistics.", "オフサイトの議題と段取りを計画しましょう。"))
+                }
+                if selected.contains("バグ報告") {
+                    pool.append(("I found a bug; here's a minimal reproducible example.", "バグを見つけました。最小の再現例はこちらです。"))
+                }
                 if pool.isEmpty {
                     pool = [
                         ("Could you share a quick update on the current status?", "現在の進捗を簡単に共有してもらえますか？"),

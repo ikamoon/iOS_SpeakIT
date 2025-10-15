@@ -13,12 +13,28 @@ struct OnboardingGoalView: View {
     @State private var customText = ""
     @State private var goNext = false
 
-    let tags = ["会議",
-                "スタンドアップ",
-                "雑談",
-                "コードレビュー",
-                "面接",
-                "顧客対応"]
+    let tags = [
+        "会議",
+        "スタンドアップ",
+        "雑談",
+        "コードレビュー",
+        "面接",
+        "顧客対応",
+        "日程調整",
+        "プレゼン",
+        "障害対応",
+        "要件定義",
+        "仕様相談",
+        "見積り",
+        "リリース",
+        "ドキュメント",
+        "設計レビュー",
+        "メール",
+        "1on1",
+        "外部折衝",
+        "オフサイト",
+        "バグ報告"
+    ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
