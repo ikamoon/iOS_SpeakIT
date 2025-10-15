@@ -25,6 +25,8 @@ struct OnboardingGoalView: View {
             Text("英語で話したい場面を教えてください")
                 .font(.title2.bold())
 
+            FlexibleChips(items: tags, selected: $selectedSituations)
+
             TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
                 .textFieldStyle(.roundedBorder)
                 .padding(.top, 12)
