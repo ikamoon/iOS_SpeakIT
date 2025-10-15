@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct OnboardingLevelView: View {
+    @StateObject var store = OnboardingStore()
     @State private var level = 2.0 // 1=初級, 2=中級, 3=上級
     @State private var goNext = false
 
     var body: some View {
         VStack(spacing: 32) {
+            Spacer()
             Text("英語のレベルを教えてください")
                 .font(.title2.bold())
             
@@ -37,6 +39,14 @@ struct OnboardingLevelView: View {
             }
         }
         .padding()
+        .onAppear {
+            // 復元時
+            switch store.profile.level {
+            case "BASIC": level = 1
+            case "FLUENT": level = 3
+            default: level = 2
+            }
+        }
     }
 
     var levelLabel: String {

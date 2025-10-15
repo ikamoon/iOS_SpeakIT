@@ -26,11 +26,12 @@ struct SpeakPMApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                OnboardingFlowView()
+            SplashView()
+        
+//            NavigationStack {
+//                OnboardingFlowView()
 //                OnboardingWelcomeView()
-//                DeckListView()
-            }
+//            }
         }
         .modelContainer(sharedModelContainer)
     }
