@@ -57,6 +57,8 @@ struct SplashView: View {
                 .opacity(opacity)
                 .onAppear {
                 logger.info("スプラッシュ画面が表示されました")
+                    // 音声合成のセッションを早期初期化して、音声サーバ接続の失敗を防止
+                    SpeechService.shared.prepareAudioSession()
                     withAnimation(.easeIn(duration: 1.2)) {
                         self.size = 0.9
                         self.opacity = 1.0
@@ -68,6 +70,10 @@ struct SplashView: View {
                     withAnimation {
                         self.isActive = true
                     }
+                }
+                // TTSを無音で一度だけウォームアップして、初回の接続失敗を避ける
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    SpeechService.shared.prewarmTTS()
                 }
             }
         }
