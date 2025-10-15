@@ -9,7 +9,7 @@ import SwiftUI
 import Lottie
 
 struct OnboardingWelcomeView: View {
-    @State private var showDeckList = false
+    @State private var goNext = false
     
     var body: some View {
         NavigationStack {
@@ -30,11 +30,8 @@ struct OnboardingWelcomeView: View {
 
                 Spacer()
 
-                NavigationLink(destination: DeckListView(), isActive: $showDeckList) {
-                    EmptyView()
-                }
                 Button(action: {
-                    showDeckList = true
+                    goNext = true
                 }) {
                     Text("はじめる")
                         .font(.headline)
@@ -48,6 +45,9 @@ struct OnboardingWelcomeView: View {
             }
             .padding()
             .background(Color(.systemBackground))
+            .navigationDestination(isPresented: $goNext) {
+                OnboardingRoleView()
+            }
         }
     }
 }
