@@ -18,6 +18,9 @@ struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isLoading: Bool = true
     @State private var didSpeakFirstOnAppear: Bool = false
+    @State private var generatedExample: String? = nil
+    @State private var isGenerating: Bool = false
+    @State private var generationError: String? = nil
     private let themeColor = Color(red: 0/255.0, green: 163/255.0, blue: 221/255.0)
     private let pastelGreen = Color(red: 128/255.0, green: 255/255.0, blue: 128/255.0)
     private let pastelBlue = Color(red: 148/255.0, green: 219/255.0, blue: 255/255.0)
@@ -85,8 +88,37 @@ struct ContentView: View {
                                             }
                                             .accessibilityLabel("例文を再生")
                                         }
-                                        Text(word.exampleJapanese)
                                     }
+                                    Text(word.exampleJapanese)
+                                    
+                                    if let example = generatedExample {
+                                        HStack(spacing: 8) {
+                                            Text(generatedExample ?? word.exampleEnglish)
+                                                .onTapGesture { SpeechService.shared.speakEnglish(generatedExample ?? word.exampleEnglish) }
+                                            Button(action: { SpeechService.shared.speakEnglish(generatedExample ?? word.exampleEnglish) }) {
+                                                Image(systemName: "speaker.wave.2.fill")
+                                                    .font(.system(size: 18))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .accessibilityLabel("例文を再生")
+                                        }
+                                    }
+                                    
+                                    Button(action: { generateExample(for: word.english) }) {
+                                        if isGenerating {
+                                            ProgressView()
+                                        } else {
+                                            Text("自分の例文を生成する")
+                                        }
+                                    }
+                                    .disabled(isGenerating)
+                                    
+                                    if let error = generationError {
+                                        Text(error)
+                                            .foregroundColor(.red)
+                                            .font(.caption)
+                                    }
+                                    
                                     Spacer()
                                     HStack(spacing: 8) {
                                         Image(systemName: "hand.tap")
@@ -278,6 +310,43 @@ struct ContentView: View {
         review.nextReviewAt = Calendar.current.date(byAdding: .day, value: days, to: Date())
         review.updatedAt = .init()
         try? context.save()
+    }
+    
+    // Add the function to call OpenAI API:
+    private func generateExample(for word: String) {
+        isGenerating = true
+        generationError = nil
+        generatedExample = nil
+        let prompt = "英単語 '" + word + "' を使った自然な英語例文を1つ生成してください。"
+        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = [
+            "model": "gpt-3.5-turbo",
+            "messages": [["role": "user", "content": prompt]],
+            "max_tokens": 64
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                isGenerating = false
+                if let error = error {
+                    generationError = error.localizedDescription
+                    return
+                }
+                guard let data = data,
+                      let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      let choices = json["choices"] as? [[String: Any]],
+                      let message = choices.first?["message"] as? [String: Any],
+                      let content = message["content"] as? String else {
+                    generationError = "AI例文の取得に失敗しました"
+                    return
+                }
+                generatedExample = content.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        }.resume()
     }
 }
 
