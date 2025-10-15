@@ -30,6 +30,9 @@ struct OnboardingLevelView: View {
             Spacer()
             
             Button("次へ", action: {
+                store.profile.level = level == 1 ? "BASIC" : (level == 2 ? "INTERMEDIATE" : "FLUENT")
+                store.save()
+                
                 goNext = true
             })
             .buttonStyle(.borderedProminent)
