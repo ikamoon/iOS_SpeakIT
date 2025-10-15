@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnboardingRoleView: View {
+    @StateObject var store = OnboardingStore()
     @State private var selectedRoles: Set<String> = []
     @State private var goNext = false
     
@@ -45,6 +46,9 @@ struct OnboardingRoleView: View {
 
             
             Button("次へ", action: {
+                store.profile.roles = selectedRoleTitles
+                store.save()
+                
                 goNext = true
             })
             .buttonStyle(.borderedProminent)
@@ -79,5 +83,13 @@ struct RoleCard: View {
                         .stroke(isSelected ? .clear : Color.gray.opacity(0.2), lineWidth: 1)
                 )
         }
+    }
+}
+
+// Convert selectedRoles to [String] containing only titles (絵文字を抜かして)
+extension OnboardingRoleView {
+    var selectedRoleTitles: [String] {
+        // roles: [(emoji, title)]
+        roles.map { $0.1 }.filter { selectedRoles.contains($0) }
     }
 }
