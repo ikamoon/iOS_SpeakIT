@@ -88,6 +88,7 @@ struct ContentView: View {
                                         }
                                     }
                                     Text(word.exampleJapanese)
+                                        .foregroundColor(.secondary)
                                     
                                     if let example = generatedExample {
                                         HStack(spacing: 8) {
