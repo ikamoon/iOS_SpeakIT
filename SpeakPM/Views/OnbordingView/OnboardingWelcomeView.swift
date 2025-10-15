@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct OnboardingWelcomeView: View {
     @State private var showDeckList = false
@@ -15,8 +16,8 @@ struct OnboardingWelcomeView: View {
             VStack(spacing: 24) {
                 Spacer()
 
-//                LottieView(name: "ai_wave") // AI音声風アニメーション
-//                    .frame(height: 180)
+                LottieView(filename: "AI animation") // AI音声風アニメーション
+                    .frame(height: 180)
 
                 Text("SpeakITへようこそ 👋")
                     .font(.title)
@@ -49,4 +50,29 @@ struct OnboardingWelcomeView: View {
             .background(Color(.systemBackground))
         }
     }
+}
+
+struct LottieView: UIViewRepresentable {
+    var filename: String
+
+    func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
+        let view = UIView(frame: .zero)
+        let animationView = LottieAnimationView()
+        animationView.animation = LottieAnimation.named(filename)
+        animationView.contentMode = .scaleAspectFit
+        animationView.play()
+        animationView.loopMode = .loop
+
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(animationView)
+
+        NSLayoutConstraint.activate([
+            animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            animationView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LottieView>) {}
 }
