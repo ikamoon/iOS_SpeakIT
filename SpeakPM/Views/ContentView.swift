@@ -18,7 +18,7 @@ struct ContentView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isLoading: Bool = true
     @State private var didSpeakFirstOnAppear: Bool = false
-    @State private var generatedExample: String? = nil
+    @State private var generatedExamplePair: OpenAIService.ExamplePair? = nil
     @State private var isGenerating: Bool = false
     @State private var generationError: String? = nil
     @StateObject private var onboardingStore = OnboardingStore()
@@ -90,17 +90,19 @@ struct ContentView: View {
                                     Text(word.exampleJapanese)
                                         .foregroundColor(.secondary)
                                     
-                                    if let example = generatedExample {
+                                    if let pair = generatedExamplePair {
                                         HStack(spacing: 8) {
-                                            Text(example)
-                                                .onTapGesture { SpeechService.shared.speakEnglish(example) }
-                                            Button(action: { SpeechService.shared.speakEnglish(example) }) {
+                                            Text(pair.en)
+                                                .onTapGesture { SpeechService.shared.speakEnglish(pair.en) }
+                                            Button(action: { SpeechService.shared.speakEnglish(pair.en) }) {
                                                 Image(systemName: "speaker.wave.2.fill")
                                                     .font(.system(size: 18))
                                                     .foregroundColor(.gray)
                                             }
                                             .accessibilityLabel("例文を再生")
                                         }
+                                        Text(pair.ja)
+                                            .foregroundColor(.secondary)
                                     }
                                     
                                     Divider()
@@ -117,15 +119,21 @@ struct ContentView: View {
                                                 .foregroundColor(.secondary)
                                         } else {
                                             ForEach(userExamples, id: \.usersExamplesID) { ex in
-                                                HStack(spacing: 8) {
-                                                    Text(ex.example)
-                                                        .onTapGesture { SpeechService.shared.speakEnglish(ex.example) }
-                                                    Button(action: { SpeechService.shared.speakEnglish(ex.example) }) {
-                                                        Image(systemName: "speaker.wave.2.fill")
-                                                            .font(.system(size: 18))
-                                                            .foregroundColor(.gray)
+                                                VStack(alignment: .leading, spacing: 6) {
+                                                    HStack(spacing: 8) {
+                                                        Text(ex.example)
+                                                            .onTapGesture { SpeechService.shared.speakEnglish(ex.example) }
+                                                        Button(action: { SpeechService.shared.speakEnglish(ex.example) }) {
+                                                            Image(systemName: "speaker.wave.2.fill")
+                                                                .font(.system(size: 18))
+                                                                .foregroundColor(.gray)
+                                                        }
+                                                        .accessibilityLabel("例文を再生")
                                                     }
-                                                    .accessibilityLabel("例文を再生")
+                                                    if let ja = ex.exampleJa, !ja.isEmpty {
+                                                        Text(ja)
+                                                            .foregroundColor(.secondary)
+                                                    }
                                                 }
                                             }
                                         }
@@ -248,6 +256,12 @@ struct ContentView: View {
                         .padding(12)
                         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.2)))
+                    if let pair = generatedExamplePair {
+                        Text("日本語訳")
+                            .font(.headline)
+                        Text(pair.ja)
+                            .foregroundColor(.secondary)
+                    }
                     Spacer()
                 }
                 .padding()
@@ -259,9 +273,9 @@ struct ContentView: View {
                         Button("保存") {
                             let trimmed = exampleEditorText.trimmingCharacters(in: .whitespacesAndNewlines)
                             if let w = safeCurrentWord {
-                                saveUserExample(wordID: w.id, text: trimmed)
+                                saveUserExample(wordID: w.id, en: trimmed, ja: generatedExamplePair?.ja)
                             }
-                            generatedExample = nil
+                            generatedExamplePair = nil
                             isExampleEditorPresented = false
                         }
                     }
@@ -375,13 +389,13 @@ struct ContentView: View {
     private func generateExample(for word: String) {
         isGenerating = true
         generationError = nil
-        generatedExample = nil
+        generatedExamplePair = nil
         let profile = onboardingStore.profile
         Task {
             do {
-                let text = try await OpenAIService().generateExampleForWord(profile: profile, word: word)
-                generatedExample = text
-                exampleEditorText = text
+                let pair = try await OpenAIService().generateExampleForWord(profile: profile, word: word)
+                generatedExamplePair = pair
+                exampleEditorText = pair.en
                 isExampleEditorPresented = true
                 isGenerating = false
             } catch {
@@ -391,8 +405,8 @@ struct ContentView: View {
         }
     }
     
-    private func saveUserExample(wordID: Int, text: String) {
-        let record = UsersExamples(wordID: wordID, example: text)
+    private func saveUserExample(wordID: Int, en: String, ja: String?) {
+        let record = UsersExamples(wordID: wordID, example: en, exampleJa: ja)
         context.insert(record)
         try? context.save()
         loadStoredUserExamples(for: wordID)

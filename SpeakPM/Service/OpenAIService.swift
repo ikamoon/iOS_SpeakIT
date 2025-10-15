@@ -97,8 +97,8 @@ struct OpenAIService {
         }
     }
 
-    // 単語を1回だけ含む英語文を1つ生成（英語のみ）
-    func generateExampleForWord(profile: UserProfile, word: String) async throws -> String {
+    // 単語を1回だけ含む英語文（en）と日本語訳（ja）のペアを1つ生成
+    func generateExampleForWord(profile: UserProfile, word: String) async throws -> ExamplePair {
         guard !apiKey.isEmpty else { throw ServiceError.missingApiKey }
 
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
@@ -128,21 +128,23 @@ struct OpenAIService {
         goal: \(goal)
 
         制約:
-        - 英単語 '\(word)' を1回だけ含む自然な英文を1つ出力。
+        - 英単語 '\(word)' を1回だけ含む自然な英文（en）を1文生成。
+        - その日本語訳（ja）も同時に生成。
         - 難易度: BASIC→CEFR A2, INTERMEDIATE→B1-B2, FLUENT→C1。
         - 可能なら roles と situations に関連する職務・場面の文脈にする。
-        - 出力は英語のみ。引用符、説明、日本語訳は含めない。
-        - 語数の目安: BASIC≤14語, INTERMEDIATE≤20語, FLUENT≤26語。
+        - 出力はJSONのみ。形式: {"en":"...","ja":"..."}
+        - 追加の説明、コードブロック、引用符は含めない。
+        - 英文の語数目安: BASIC≤14語, INTERMEDIATE≤20語, FLUENT≤26語。
         """
 
-        let userPrompt = "上記条件で英文を1文だけ生成してください。"
+        let userPrompt = "上記条件で英日ペアを1件、JSONのみで生成してください。"
         let body: [String: Any] = [
             "model": model,
             "messages": [
                 ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": userPrompt]
             ],
-            "max_tokens": 64
+            "max_tokens": 120
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -153,6 +155,12 @@ struct OpenAIService {
               let content = message["content"] as? String else {
             throw ServiceError.invalidResponse
         }
-        return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let contentData = content.data(using: .utf8) else { throw ServiceError.invalidResponse }
+        do {
+            let pair = try JSONDecoder().decode(ExamplePair.self, from: contentData)
+            return pair
+        } catch {
+            throw ServiceError.decodingFailed(content)
+        }
     }
 }
