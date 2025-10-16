@@ -29,10 +29,10 @@ struct OnboardingGoalView: View {
         "リリース",
         "ドキュメント",
         "設計レビュー",
-//        "メール",
+        "メール",
         "1on1",
         "外部折衝",
-//        "オフサイト",
+        "オフサイト",
         "バグ報告"
     ]
 
@@ -41,13 +41,12 @@ struct OnboardingGoalView: View {
             Text("英語で話したい場面を教えてください")
                 .font(.title2.bold())
 
-//            ScrollView {
+            ScrollView {
                 FlexibleChips(items: tags, selected: $selectedSituations)
-//                    .frame(maxWidth: .infinity, alignment: .topLeading)
-//            }
-//            .frame(alignment: .bottomTrailing)
-//            .frame(height: 300, alignment: .top)
-//            .scrollIndicators(.hidden)
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+            .frame(height: 300, alignment: .top)
+            .scrollIndicators(.hidden)
 
 //            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
 //                .textFieldStyle(.roundedBorder)
