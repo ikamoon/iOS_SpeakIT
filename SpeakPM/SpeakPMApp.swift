@@ -14,6 +14,7 @@ struct SpeakPMApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             WordReview.self,
+            UsersExamples.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -26,9 +27,12 @@ struct SpeakPMApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                DeckListView()
-            }
+            SplashView()
+        
+//            NavigationStack {
+//                OnboardingFlowView()
+//                OnboardingWelcomeView()
+//            }
         }
         .modelContainer(sharedModelContainer)
     }

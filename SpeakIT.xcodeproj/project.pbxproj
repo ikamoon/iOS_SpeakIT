@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5D0718F12E9F24170071FE80 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 5D0718F02E9F24170071FE80 /* Lottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5DE72DE92E963F34005598F5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D0718F12E9F24170071FE80 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,12 +90,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D0718EF2E9F24170071FE80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5DE72DCE2E963F32005598F5 = {
 			isa = PBXGroup;
 			children = (
 				5DE72DD92E963F32005598F5 /* SpeakPM */,
 				5DE72DEB2E963F34005598F5 /* SpeakPMTests */,
 				5DE72DF52E963F34005598F5 /* SpeakPMUITests */,
+				5D0718EF2E9F24170071FE80 /* Frameworks */,
 				5DE72DD82E963F32005598F5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +138,7 @@
 			);
 			name = SpeakIT;
 			packageProductDependencies = (
+				5D0718F02E9F24170071FE80 /* Lottie */,
 			);
 			productName = SpeakPM;
 			productReference = 5DE72DD72E963F32005598F5 /* SpeakIT.app */;
@@ -208,6 +222,9 @@
 			);
 			mainGroup = 5DE72DCE2E963F32005598F5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5D0718EE2E9F239F0071FE80 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5DE72DD82E963F32005598F5 /* Products */;
 			projectDirPath = "";
@@ -297,6 +314,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeakPM/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SpeakIT;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -344,6 +362,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeakPM/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SpeakIT;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -634,6 +653,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5D0718EE2E9F239F0071FE80 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5D0718F02E9F24170071FE80 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D0718EE2E9F239F0071FE80 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DE72DCF2E963F32005598F5 /* Project object */;
 }

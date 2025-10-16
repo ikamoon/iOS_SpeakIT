@@ -27,7 +27,19 @@ struct LicenseView: View {
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
 
-//                #if DEBUG
+                #if DEBUG
+                Divider()
+                Text("【デバッグ情報】")
+                Button(action: {
+                    UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
+                }) {
+                    HStack {
+                    Image(systemName: "ladybug")
+                            .foregroundColor(.orange)
+                    Text("オンボーディングをテストする")
+                }
+                                        }
+                #endif
                 Divider()
                 VStack(alignment: .leading, spacing: 8) {
                     Text("学習進捗")
@@ -60,7 +72,6 @@ struct LicenseView: View {
                         }
                     }
                 }
-//                #endif
             }
             .padding()
         }
