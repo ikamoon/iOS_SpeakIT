@@ -20,7 +20,6 @@ struct OnboardingGoalView: View {
         "コードレビュー",
         "面接",
         "顧客対応",
-        "日程調整",
         "プレゼン",
         "障害対応",
         "要件定義",
@@ -30,10 +29,7 @@ struct OnboardingGoalView: View {
         "ドキュメント",
         "設計レビュー",
         "メール",
-        "1on1",
-        "外部折衝",
-        "オフサイト",
-        "バグ報告"
+        "1on1"
     ]
 
     var body: some View {
@@ -45,14 +41,15 @@ struct OnboardingGoalView: View {
                 FlexibleChips(items: tags, selected: $selectedSituations)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
             }
-            .frame(height: 300, alignment: .top)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(height: 300, alignment: .top)
             .scrollIndicators(.hidden)
 
 //            TextField("自由入力（例：英語で進捗報告したい）", text: $customText)
 //                .textFieldStyle(.roundedBorder)
 //                .padding(.top, 12)
 
-            Spacer()
+//            Spacer()
 
             Button("完了") {
                 store.profile.situations = Array(selectedSituations)
@@ -109,20 +106,23 @@ struct FlowLayout<Data: RandomAccessCollection, Content: View>: View where Data.
                 ForEach(Array(items), id: \.self) { item in
                     content(item)
                         .padding(6)
-                        .alignmentGuide(.leading) { d in
-                            if abs(width - d.width) > geo.size.width { width = 0; height -= d.height }
-                            let result = width
-                            width -= d.width
-                            return result
-                        }
                         .alignmentGuide(.top) { _ in
                             let result = height
+                            return result
+                        }
+                        .alignmentGuide(.leading) { d in
+                            if abs(width - d.width) > geo.size.width {
+                                width = 0
+                                height -= d.height
+                            }
+                            let result = width
+                            width -= d.width
                             return result
                         }
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
 
