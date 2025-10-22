@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D0718F12E9F24170071FE80 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 5D0718F02E9F24170071FE80 /* Lottie */; };
+		5D8B66FE2EA767F3004634AF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5D8B66FD2EA767F3004634AF /* Config.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D8B66FD2EA767F3004634AF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		5DE72DD72E963F32005598F5 /* SpeakIT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeakIT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DE72DE82E963F34005598F5 /* SpeakITTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeakITTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DE72DF22E963F34005598F5 /* SpeakITUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeakITUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +102,7 @@
 		5DE72DCE2E963F32005598F5 = {
 			isa = PBXGroup;
 			children = (
+				5D8B66FD2EA767F3004634AF /* Config.xcconfig */,
 				5DE72DD92E963F32005598F5 /* SpeakPM */,
 				5DE72DEB2E963F34005598F5 /* SpeakPMTests */,
 				5DE72DF52E963F34005598F5 /* SpeakPMUITests */,
@@ -242,6 +245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D8B66FE2EA767F3004634AF /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +333,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ikamon.SpeakIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -377,7 +381,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ikamon.SpeakIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -397,6 +401,7 @@
 		};
 		5DE72DFE2E963F34005598F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D8B66FD2EA767F3004634AF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -459,6 +464,7 @@
 		};
 		5DE72DFF2E963F34005598F5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D8B66FD2EA767F3004634AF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
